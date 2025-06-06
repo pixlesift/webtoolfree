@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Use - Tools Hub</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS STYLES (Same as homepage for consistency) --- */
+        :root {
+            --primary-blue: #007bff;
+            --primary-blue-dark: #0056b3;
+            --light-blue-bg: #e7f3ff;
+            --dark-text: #212529;
+            --light-text: #6c757d;
+            --background-color: #f8f9fa;
+            --white: #ffffff;
+            --border-color: #dee2e6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--dark-text); line-height: 1.7; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .main-header { background-color: var(--white); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-blue); text-decoration: none; }
+        .main-nav ul { list-style: none; display: flex; gap: 25px; }
+        .main-nav a { text-decoration: none; color: var(--dark-text); font-weight: 500; transition: color 0.3s ease; }
+        .main-nav a:hover { color: var(--primary-blue); }
+        .header-contact { font-size: 0.9rem; color: var(--light-text); }
+        .mobile-nav-toggle { display: none; font-size: 1.5rem; background: none; border: none; cursor: pointer; }
+        .main-footer { background-color: var(--white); padding: 40px 0; border-top: 1px solid var(--border-color); color: var(--light-text); }
+        .main-footer .container { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+        .footer-logo .logo { font-size: 1.3rem; }
+        .footer-logo p { margin-top: 5px; }
+        .footer-contact a { color: var(--light-text); text-decoration: none; }
+        .footer-contact a:hover { color: var(--primary-blue); }
+        .footer-links ul { list-style: none; display: flex; gap: 20px; }
+        .footer-links a { color: var(--light-text); text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+
+        /* Page-specific styles for text content */
+        .text-content-page { padding: 60px 0; background-color: var(--white); }
+        .text-content-page .container { max-width: 800px; }
+        .text-content-page h1 { font-size: 2.5rem; margin-bottom: 10px; }
+        .text-content-page .last-updated { color: var(--light-text); margin-bottom: 30px; font-style: italic; }
+        .text-content-page h2 { font-size: 1.8rem; margin-top: 40px; margin-bottom: 15px; color: var(--primary-blue); }
+        .text-content-page p, .text-content-page ul { margin-bottom: 15px; }
+        .text-content-page ul { padding-left: 20px; }
+
+        @media (max-width: 768px) {
+            .main-nav { display: none; position: absolute; top: 68px; left: 0; right: 0; background-color: var(--white); border-bottom: 1px solid var(--border-color); padding: 20px; }
+            .main-nav.active { display: block; }
+            .main-nav ul { flex-direction: column; align-items: center; gap: 20px; }
+            .header-contact { display: none; }
+            .mobile-nav-toggle { display: block; }
+            .text-content-page h1 { font-size: 2rem; }
+            .text-content-page h2 { font-size: 1.5rem; }
+        }
+        @media (min-width: 769px) {
+            .main-footer .container { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">Tools Wonder</a>
+            <nav class="main-nav" id="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#tools">Tools</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <i class="fa-regular fa-envelope"></i> toolsHub@gmail.com
+            </div>
+            <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-content-page">
+            <div class="container">
+                <h1>Terms of Use</h1>
+                <p class="last-updated">Last Updated: October 26, 2023</p>
+
+                <p>Please read these Terms of Use ("Terms") carefully before using the Tools Hub website (the "Service") operated by Tools Hub ("us", "we", or "our"). Your access to and use of the Service is conditioned on your acceptance of and compliance with these Terms.</p>
+                
+                <h2>1. Acceptance of Terms</h2>
+                <p>By accessing or using the Service, you agree to be bound by these Terms. If you disagree with any part of the terms, then you may not access the Service.</p>
+
+                <h2>2. Use of Services</h2>
+                <p>Tools Hub provides a collection of free online tools. You agree to use these tools only for their intended purposes. You must not use our services to:</p>
+                <ul>
+                    <li>Upload or process any content that is illegal, harmful, or infringes on the rights of others.</li>
+                    <li>Attempt to gain unauthorized access to our servers or any other part of our Service.</li>
+                    <li>Perform any activity that could disable, overburden, or impair the proper working of the Service.</li>
+                </ul>
+
+                <h2>3. Disclaimer of Warranty</h2>
+                <p>The Service is provided on an "AS IS" and "AS AVAILABLE" basis. The Service is provided without warranties of any kind, whether express or implied, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, non-infringement or course of performance. We do not warrant that the service will function uninterrupted, secure, or available at any particular time or location.</p>
+
+                <h2>4. Limitation of Liability</h2>
+                <p>In no event shall Tools Hub, nor its directors, employees, partners, agents, suppliers, or affiliates, be liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the Service.</p>
+
+                <h2>5. Governing Law</h2>
+                <p>These Terms shall be governed and construed in accordance with the laws of [Your Country/State], without regard to its conflict of law provisions.</p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-logo">
+                <a href="index.html" class="logo">Tools Wonder</a>
+                <p>Simplifying your digital life.</p>
+            </div>
+            <div class="footer-contact">
+                <a href="mailto:toolshub@gmail.com"><i class="fa-regular fa-envelope"></i> toolshub@gmail.com</a>
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+        const mainNav = document.getElementById('main-nav');
+        mobileNavToggle.addEventListener('click', () => mainNav.classList.toggle('active'));
+    </script>
+
+</body>
+</html>
