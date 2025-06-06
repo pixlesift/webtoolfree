@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Resizer | Your Multi-Tool Website</title>
+    
+    <!-- CSS Styles -->
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover-color: #0056b3;
+            --secondary-color: #f0f8ff; /* AliceBlue */
+            --background-color: #e9ecef;
+            --text-color: #343a40;
+            --white-color: #ffffff;
+            --border-color: #cce5ff;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- Main Container & Header --- */
+        .resizer-wrapper {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 2rem;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .resizer-container {
+            background-color: var(--white-color);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+        }
+
+        /* --- Buttons & Inputs --- */
+        .button {
+            background-color: var(--primary-color);
+            color: var(--white-color);
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.2s ease, transform 0.2s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .button:hover:not(:disabled) {
+            background-color: var(--primary-hover-color);
+            transform: translateY(-2px);
+        }
+
+        .button:disabled {
+            background-color: #a7cffa;
+            cursor: not-allowed;
+        }
+
+        .button.secondary-button {
+            background-color: #6c757d;
+        }
+        .button.secondary-button:hover:not(:disabled) {
+            background-color: #5a6268;
+        }
+
+        /* --- Upload Area --- */
+        .upload-area {
+            border: 3px dashed var(--border-color);
+            border-radius: 12px;
+            padding: 3rem 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color 0.3s, background-color 0.3s;
+        }
+
+        .upload-area.active {
+            border-color: var(--primary-color);
+            background-color: var(--secondary-color);
+        }
+
+        .upload-icon {
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        .upload-area p {
+            margin: 0.5rem 0;
+        }
+
+        .separator {
+            color: #adb5bd;
+            font-size: 0.9rem;
+        }
+
+        /* --- Preview & Controls Area --- */
+        .preview-area {
+            display: none; /* Hidden by default */
+            flex-direction: row;
+            gap: 2rem;
+            align-items: flex-start;
+        }
+
+        .image-preview-container {
+            flex: 1.2;
+            min-width: 200px;
+        }
+        
+        #imagePreview {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            background-color: var(--secondary-color);
+            margin-bottom: 1rem;
+        }
+        
+        #originalDimensions {
+            font-size: 0.9rem;
+            color: #6c757d;
+        }
+
+        .controls-container {
+            flex: 1;
+            min-width: 250px;
+            text-align: left;
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .controls-container h2 {
+            color: var(--primary-color);
+            border-bottom: 2px solid var(--secondary-color);
+            padding-bottom: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .dimension-inputs {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dimension-inputs .input-group {
+            flex: 1;
+        }
+
+        .dimension-inputs label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+        
+        .dimension-inputs input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            font-size: 1rem;
+        }
+        
+        .lock-icon {
+            cursor: pointer;
+            padding: 10px;
+            margin-top: 25px; /* Aligns with inputs */
+        }
+        
+        #aspectRatioLock {
+            display: none;
+        }
+        
+        #aspectRatioLock + label svg {
+             color: #ced4da;
+             transition: color 0.2s ease;
+        }
+        #aspectRatioLock:checked + label svg {
+            color: var(--primary-color);
+        }
+
+        #downloadBtn {
+            text-align: center;
+        }
+
+        footer {
+            margin-top: 2rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            header h1 { font-size: 2rem; }
+            .resizer-container { padding: 1.5rem; }
+            .preview-area {
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-preview-container, .controls-container {
+                width: 100%;
+                max-width: 400px;
+            }
+            .controls-container { margin-top: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="resizer-wrapper">
+        <header>
+            <h1>Image Resizer</h1>
+            <p>Easily resize your images by specifying a new width and height.</p>
+        </header>
+
+        <main class="resizer-container">
+            <!-- Upload Area -->
+            <div class="upload-area" id="uploadArea">
+                <svg class="upload-icon" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                <p><strong>Drag & Drop</strong> your image here</p>
+                <p class="separator">or</p>
+                <button class="button" id="browseBtn">Browse Files</button>
+                <input type="file" id="fileInput" accept="image/*" hidden>
+            </div>
+
+            <!-- Preview and Controls Area -->
+            <div class="preview-area" id="previewArea">
+                <div class="image-preview-container">
+                    <img id="imagePreview" src="#" alt="Image Preview">
+                    <p id="originalDimensions"></p>
+                </div>
+
+                <div class="controls-container">
+                    <h2>Resizing Options</h2>
+                    
+                    <div class="dimension-inputs">
+                        <div class="input-group">
+                            <label for="widthInput">Width (px)</label>
+                            <input type="number" id="widthInput" min="1">
+                        </div>
+                        
+                        <div class="lock-icon">
+                            <input type="checkbox" id="aspectRatioLock" checked>
+                            <label for="aspectRatioLock" title="Maintain Aspect Ratio">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                            </label>
+                        </div>
+                        
+                        <div class="input-group">
+                            <label for="heightInput">Height (px)</label>
+                            <input type="number" id="heightInput" min="1">
+                        </div>
+                    </div>
+                    
+                    <a href="#" class="button" id="downloadBtn" download disabled>Download Resized Image</a>
+                    <button class="button secondary-button" id="startOverBtn">Resize Another Image</button>
+                </div>
+            </div>
+            
+        </main>
+        <footer>
+            <p>All processing is done securely on your device. Your images are never uploaded to a server.</p>
+        </footer>
+    </div>
+
+    <!-- JavaScript Logic -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // DOM Elements
+            const uploadArea = document.getElementById('uploadArea');
+            const browseBtn = document.getElementById('browseBtn');
+            const fileInput = document.getElementById('fileInput');
+            const previewArea = document.getElementById('previewArea');
+            const imagePreview = document.getElementById('imagePreview');
+            const widthInput = document.getElementById('widthInput');
+            const heightInput = document.getElementById('heightInput');
+            const aspectRatioLock = document.getElementById('aspectRatioLock');
+            const downloadBtn = document.getElementById('downloadBtn');
+            const startOverBtn = document.getElementById('startOverBtn');
+            const originalDimensionsEl = document.getElementById('originalDimensions');
+
+            let originalFile = null;
+            let originalImage = new Image();
+            let originalAspectRatio;
+
+            // --- Event Listeners ---
+            browseBtn.addEventListener('click', () => fileInput.click());
+            fileInput.addEventListener('change', (e) => handleFileSelect(e.target.files));
+
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                uploadArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+
+            uploadArea.addEventListener('dragenter', () => uploadArea.classList.add('active'));
+            uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('active'));
+            uploadArea.addEventListener('drop', (e) => {
+                uploadArea.classList.remove('active');
+                handleFileSelect(e.dataTransfer.files);
+            });
+            
+            widthInput.addEventListener('input', handleDimensionChange);
+            heightInput.addEventListener('input', handleDimensionChange);
+            startOverBtn.addEventListener('click', resetTool);
+
+            // --- Core Functions ---
+            function handleFileSelect(files) {
+                if (files.length === 0) return;
+                originalFile = files[0];
+
+                if (!originalFile.type.startsWith('image/')) {
+                    alert('Please upload a valid image file.');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    originalImage.src = e.target.result;
+                    originalImage.onload = () => {
+                        originalAspectRatio = originalImage.width / originalImage.height;
+                        widthInput.value = originalImage.width;
+                        heightInput.value = originalImage.height;
+                        originalDimensionsEl.textContent = `Original: ${originalImage.width} x ${originalImage.height} px`;
+                        
+                        showPreviewArea();
+                        generatePreview();
+                    };
+                };
+                reader.readAsDataURL(originalFile);
+            }
+            
+            function handleDimensionChange(e) {
+                if (!aspectRatioLock.checked) {
+                    generatePreview();
+                    return;
+                }
+
+                const changedInput = e.target;
+
+                if (changedInput === widthInput) {
+                    heightInput.value = Math.round(widthInput.value / originalAspectRatio);
+                } else {
+                    widthInput.value = Math.round(heightInput.value * originalAspectRatio);
+                }
+                generatePreview();
+            }
+
+            function generatePreview() {
+                const width = parseInt(widthInput.value);
+                const height = parseInt(heightInput.value);
+
+                if (isNaN(width) || isNaN(height) || width < 1 || height < 1) {
+                    downloadBtn.disabled = true;
+                    return;
+                }
+
+                const canvas = document.createElement('canvas');
+                canvas.width = width;
+                canvas.height = height;
+                const ctx = canvas.getContext('2d');
+                
+                // Draw image to canvas
+                ctx.drawImage(originalImage, 0, 0, width, height);
+
+                // Update preview image
+                imagePreview.src = canvas.toDataURL(originalFile.type);
+                
+                // Update download link
+                downloadBtn.href = imagePreview.src;
+                downloadBtn.download = `resized-${originalFile.name}`;
+                downloadBtn.disabled = false;
+            }
+
+            function showPreviewArea() {
+                uploadArea.style.display = 'none';
+                previewArea.style.display = 'flex';
+            }
+
+            function resetTool() {
+                uploadArea.style.display = 'block';
+                previewArea.style.display = 'none';
+                fileInput.value = '';
+                originalFile = null;
+                originalImage = new Image();
+                imagePreview.src = '#';
+                downloadBtn.href = '#';
+                downloadBtn.disabled = true;
+                widthInput.value = '';
+                heightInput.value = '';
+            }
+        });
+    </script>
+</body>
+</html>
