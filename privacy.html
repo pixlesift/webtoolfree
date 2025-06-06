@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy Policy - Tools Hub</title>
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <style>
+        /* --- CSS STYLES (Same as homepage for consistency) --- */
+        :root {
+            --primary-blue: #007bff;
+            --primary-blue-dark: #0056b3;
+            --light-blue-bg: #e7f3ff;
+            --dark-text: #212529;
+            --light-text: #6c757d;
+            --background-color: #f8f9fa;
+            --white: #ffffff;
+            --border-color: #dee2e6;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body { font-family: 'Poppins', sans-serif; background-color: var(--background-color); color: var(--dark-text); line-height: 1.7; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .main-header { background-color: var(--white); padding: 15px 0; border-bottom: 1px solid var(--border-color); position: sticky; top: 0; z-index: 1000; }
+        .main-header .container { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.5rem; font-weight: 700; color: var(--primary-blue); text-decoration: none; }
+        .main-nav ul { list-style: none; display: flex; gap: 25px; }
+        .main-nav a { text-decoration: none; color: var(--dark-text); font-weight: 500; transition: color 0.3s ease; }
+        .main-nav a:hover { color: var(--primary-blue); }
+        .header-contact { font-size: 0.9rem; color: var(--light-text); }
+        .mobile-nav-toggle { display: none; font-size: 1.5rem; background: none; border: none; cursor: pointer; }
+        .main-footer { background-color: var(--white); padding: 40px 0; border-top: 1px solid var(--border-color); color: var(--light-text); }
+        .main-footer .container { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 20px; }
+        .footer-logo .logo { font-size: 1.3rem; }
+        .footer-logo p { margin-top: 5px; }
+        .footer-contact a { color: var(--light-text); text-decoration: none; }
+        .footer-contact a:hover { color: var(--primary-blue); }
+        .footer-links ul { list-style: none; display: flex; gap: 20px; }
+        .footer-links a { color: var(--light-text); text-decoration: none; }
+        .footer-links a:hover { text-decoration: underline; }
+
+        /* Page-specific styles for text content */
+        .text-content-page {
+            padding: 60px 0;
+            background-color: var(--white);
+        }
+        .text-content-page .container {
+            max-width: 800px;
+        }
+        .text-content-page h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        .text-content-page .last-updated {
+            color: var(--light-text);
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+        .text-content-page h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 15px;
+            color: var(--primary-blue);
+        }
+        .text-content-page p, .text-content-page ul {
+            margin-bottom: 15px;
+        }
+        .text-content-page ul {
+            padding-left: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-nav { display: none; position: absolute; top: 68px; left: 0; right: 0; background-color: var(--white); border-bottom: 1px solid var(--border-color); padding: 20px; }
+            .main-nav.active { display: block; }
+            .main-nav ul { flex-direction: column; align-items: center; gap: 20px; }
+            .header-contact { display: none; }
+            .mobile-nav-toggle { display: block; }
+            .text-content-page h1 { font-size: 2rem; }
+            .text-content-page h2 { font-size: 1.5rem; }
+        }
+         @media (min-width: 769px) {
+            .main-footer .container { flex-direction: row; justify-content: space-between; align-items: center; text-align: left; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">Tools Wonder</a>
+            <nav class="main-nav" id="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#tools">Tools</a></li>
+                    <li><a href="contact.html">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="header-contact">
+                <i class="fa-regular fa-envelope"></i> toolsHub@gmail.com
+            </div>
+            <button class="mobile-nav-toggle" id="mobile-nav-toggle" aria-label="Toggle navigation">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <section class="text-content-page">
+            <div class="container">
+                <h1>Privacy Policy</h1>
+                <p class="last-updated">Last Updated: October 26, 2023</p>
+
+                <p>Welcome to Tools Hub ("we," "our," or "us"). We are committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website, Tools Hub.</p>
+                
+                <h2>1. Information We Collect</h2>
+                <p>We may collect information about you in a variety of ways. The information we may collect on the Site includes:</p>
+                <ul>
+                    <li><strong>Usage Data:</strong> We may automatically collect information about your device and how you interact with our services. This may include your IP address, browser type, operating system, access times, and the pages you have viewed directly before and after accessing the Site.</li>
+                    <li><strong>Uploaded Content:</strong> For tools that require file uploads (e.g., Image Compressor, PDF to Word), the files you upload are temporarily stored on our servers for processing. We do not access the content of your files, and they are automatically deleted from our servers within a few hours.</li>
+                </ul>
+
+                <h2>2. Use of Your Information</h2>
+                <p>Having accurate information permits us to provide you with a smooth, efficient, and customized experience. Specifically, we may use information collected about you via the Site to:</p>
+                <ul>
+                    <li>Provide and operate the tools and services on our website.</li>
+                    <li>Improve our website and offerings.</li>
+                    <li>Monitor and analyze usage and trends to improve your experience.</li>
+                    <li>Ensure the security of our services.</li>
+                </ul>
+
+                <h2>3. Data Security</h2>
+                <p>We use administrative, technical, and physical security measures to help protect your personal information. While we have taken reasonable steps to secure the personal information you provide to us, please be aware that despite our efforts, no security measures are perfect or impenetrable, and no method of data transmission can be guaranteed against any interception or other type of misuse.</p>
+
+                <h2>4. Cookies</h2>
+                <p>We may use cookies and other tracking technologies to help customize the Site and improve your experience. You are free to decline our cookies if your browser permits, but some parts of our Site may not work properly for you.</p>
+
+                <h2>5. Changes to This Privacy Policy</h2>
+                <p>We may update this Privacy Policy from time to time. We will notify you of any changes by posting the new Privacy Policy on this page. You are advised to review this Privacy Policy periodically for any changes.</p>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-logo">
+                <a href="index.html" class="logo">Tools Wonder</a>
+                <p>Simplifying your digital life.</p>
+            </div>
+            <div class="footer-contact">
+                <a href="mailto:toolshub@gmail.com"><i class="fa-regular fa-envelope"></i> toolshub@gmail.com</a>
+            </div>
+            <div class="footer-links">
+                <ul>
+                    <li><a href="privacy.html">Privacy Policy</a></li>
+                    <li><a href="terms.html">Terms of Use</a></li>
+                </ul>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const mobileNavToggle = document.getElementById('mobile-nav-toggle');
+        const mainNav = document.getElementById('main-nav');
+        mobileNavToggle.addEventListener('click', () => mainNav.classList.toggle('active'));
+    </script>
+
+</body>
+</html>
