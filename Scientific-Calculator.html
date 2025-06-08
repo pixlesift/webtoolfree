@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scientific Calculator</title>
+    <meta name="description" content="A powerful, responsive scientific calculator built with HTML, CSS, and vanilla JavaScript. Perform complex calculations including trigonometric functions, logarithms, factorials, and more, all within your browser.">
+    <style>
+        :root {
+            --bg-color: #f0f2f5;
+            --calculator-bg: #ffffff;
+            --display-bg: #e9ecef;
+            --button-bg: #f8f9fa;
+            --button-hover-bg: #e2e6ea;
+            --operator-bg: #e9ecef;
+            --operator-hover-bg: #d3d9df;
+            --equals-bg: #007bff;
+            --equals-hover-bg: #0056b3;
+            --text-color: #212529;
+            --display-text-color: #343a40;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 15px;
+            box-sizing: border-box;
+        }
+
+        .main-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            align-items: flex-start;
+            max-width: 900px;
+        }
+
+        .calculator {
+            background-color: var(--calculator-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            padding: 20px;
+            width: 100%;
+            max-width: 420px;
+        }
+
+        .display {
+            background-color: var(--display-bg);
+            border-radius: 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            text-align: right;
+            word-wrap: break-word;
+            word-break: break-all;
+        }
+
+        .display #expression {
+            font-size: 1.2em;
+            color: var(--display-text-color);
+            opacity: 0.7;
+            min-height: 25px;
+            margin-bottom: 5px;
+        }
+
+        .display #result {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: var(--text-color);
+            min-height: 48px;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: right;
+        }
+        
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 10px;
+        }
+
+        .btn {
+            border: none;
+            background-color: var(--button-bg);
+            border-radius: 8px;
+            padding: 20px;
+            font-size: 1.2em;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: background-color 0.2s, transform 0.1s;
+            user-select: none;
+        }
+
+        .btn:hover {
+            background-color: var(--button-hover-bg);
+        }
+
+        .btn:active {
+            transform: scale(0.95);
+        }
+
+        .btn.operator {
+            background-color: var(--operator-bg);
+            font-weight: bold;
+        }
+        .btn.operator:hover {
+            background-color: var(--operator-hover-bg);
+        }
+        
+        .btn.equals {
+            grid-column: span 2;
+            background-color: var(--equals-bg);
+            color: white;
+            font-size: 1.5em;
+        }
+        .btn.equals:hover {
+            background-color: var(--equals-hover-bg);
+        }
+
+        /* Side Panel for Instructions & History */
+        .side-panel {
+            width: 100%;
+            max-width: 420px;
+            background-color: var(--calculator-bg);
+            border-radius: 12px;
+            box-shadow: 0 8px 25px var(--shadow-color);
+            padding: 20px;
+        }
+        
+        .side-panel h3 {
+            margin-top: 0;
+            text-align: center;
+            border-bottom: 1px solid var(--bg-color);
+            padding-bottom: 10px;
+        }
+
+        .instructions ul {
+            padding-left: 20px;
+            line-height: 1.6;
+        }
+
+        .history {
+            margin-top: 20px;
+        }
+
+        #history-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            height: 180px;
+            overflow-y: auto;
+            border: 1px solid var(--bg-color);
+            border-radius: 5px;
+            padding: 10px;
+        }
+
+        #history-list li {
+            padding: 5px;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        #history-list li:hover {
+            background-color: var(--bg-color);
+        }
+
+        #history-list li:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <div class="calculator">
+            <div class="display">
+                <div id="expression"></div>
+                <input type="text" id="result" value="0" readonly>
+            </div>
+            <div class="buttons">
+                <!-- Row 1 -->
+                <button class="btn operator" data-key="sin(">sin</button>
+                <button class="btn operator" data-key="cos(">cos</button>
+                <button class="btn operator" data-key="tan(">tan</button>
+                <button class="btn operator" data-key="^(">^</button>
+                <button class="btn operator" data-key="√(">√</button>
+                <!-- Row 2 -->
+                <button class="btn operator" data-key="log(">log</button>
+                <button class="btn operator" data-key="ln(">ln</button>
+                <button class="btn operator" data-key="(">(</button>
+                <button class="btn operator" data-key=")">)</button>
+                <button class="btn operator" data-key="!">!</button>
+                 <!-- Row 3 -->
+                <button class="btn" data-key="7">7</button>
+                <button class="btn" data-key="8">8</button>
+                <button class="btn" data-key="9">9</button>
+                <button class="btn operator" data-key="C">C</button>
+                <button class="btn operator" data-key="⌫">⌫</button>
+                <!-- Row 4 -->
+                <button class="btn" data-key="4">4</button>
+                <button class="btn" data-key="5">5</button>
+                <button class="btn" data-key="6">6</button>
+                <button class="btn operator" data-key="*">*</button>
+                <button class="btn operator" data-key="/">/</button>
+                <!-- Row 5 -->
+                <button class="btn" data-key="1">1</button>
+                <button class="btn" data-key="2">2</button>
+                <button class="btn" data-key="3">3</button>
+                <button class="btn operator" data-key="+">+</button>
+                <button class="btn operator" data-key="-">-</button>
+                <!-- Row 6 -->
+                <button class="btn" data-key="π">π</button>
+                <button class="btn" data-key="0">0</button>
+                <button class="btn" data-key=".">.</button>
+                <button class="btn equals" data-key="=">=</button>
+            </div>
+        </div>
+
+        <div class="side-panel">
+            <div class="instructions">
+                <h3>How to Use</h3>
+                <ul>
+                    <li>Click buttons or use your keyboard to enter an expression.</li>
+                    <li><strong>C</strong> clears the entry, <strong>⌫</strong> is backspace.</li>
+                    <li>Use parentheses <strong>( )</strong> for grouping.</li>
+                    <li><strong>sin, cos, tan</strong> functions expect values in degrees.</li>
+                    <li>Use <strong>^</strong> for exponents, e.g., `10^(2)`.</li>
+                    <li>Click a history item to reuse the expression.</li>
+                </ul>
+            </div>
+            <div class="history">
+                <h3>History</h3>
+                <ul id="history-list">
+                    <!-- History items will be added here -->
+                </ul>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const resultDisplay = document.getElementById('result');
+        const expressionDisplay = document.getElementById('expression');
+        const historyList = document.getElementById('history-list');
+        const buttons = document.querySelector('.buttons');
+        
+        let currentExpression = '';
+        let lastResult = '';
+        const isDeg = true; // For now, we'll assume degrees
+
+        buttons.addEventListener('click', (e) => {
+            if (!e.target.matches('button')) return;
+            const key = e.target.dataset.key;
+            handleInput(key);
+        });
+
+        window.addEventListener('keydown', (e) => {
+            const keyMap = {
+                'Enter': '=', 'Backspace': '⌫', 'c': 'C', 'C': 'C',
+                '(': '(', ')': ')', '^': '^', '!': '!',
+                's': 'sin(', 'c': 'cos(', 't': 'tan(', 'l': 'log(',
+                'p': 'π', 'e': 'e',
+                '0': '0', '1': '1', '2': '2', '3': '3', '4': '4',
+                '5': '5', '6': '6', '7': '7', '8': '8', '9': '9',
+                '+': '+', '-': '-', '*': '*', '/': '/', '.': '.',
+            };
+            if (keyMap[e.key]) {
+                e.preventDefault();
+                handleInput(keyMap[e.key]);
+            }
+        });
+
+        historyList.addEventListener('click', (e) => {
+            if (e.target.matches('li')) {
+                currentExpression = e.target.dataset.expression;
+                resultDisplay.value = currentExpression;
+                expressionDisplay.textContent = '';
+            }
+        });
+
+        function handleInput(key) {
+            if (key === '=') {
+                if (currentExpression === '') return;
+                calculate();
+            } else if (key === 'C') {
+                clearAll();
+            } else if (key === '⌫') {
+                backspace();
+            } else {
+                appendToExpression(key);
+            }
+        }
+
+        function appendToExpression(key) {
+             if (resultDisplay.value === "Error" || (lastResult !== '' && !isOperator(key))) {
+                clearAll();
+             }
+             if (lastResult !== '' && isOperator(key)) {
+                currentExpression = lastResult;
+                lastResult = '';
+             }
+
+            currentExpression += key;
+            resultDisplay.value = currentExpression;
+        }
+        
+        function isOperator(key) {
+            return ['+', '-', '*', '/', '^'].includes(key);
+        }
+
+        function calculate() {
+            try {
+                let evalExpression = preprocessExpression(currentExpression);
+                
+                // Using new Function is safer than eval()
+                const result = new Function('return ' + evalExpression)();
+
+                if (isNaN(result) || !isFinite(result)) {
+                    throw new Error("Invalid calculation");
+                }
+
+                expressionDisplay.textContent = currentExpression + ' =';
+                resultDisplay.value = result;
+                addToHistory(currentExpression, result);
+                currentExpression = result.toString();
+                lastResult = result.toString();
+
+            } catch (error) {
+                expressionDisplay.textContent = currentExpression + ' =';
+                resultDisplay.value = 'Error';
+                currentExpression = '';
+                console.error("Calculation Error:", error);
+            }
+        }
+
+        function preprocessExpression(expr) {
+            let processed = expr;
+            
+            // Replace user-friendly symbols with JS Math equivalents
+            processed = processed.replace(/π/g, 'Math.PI');
+            processed = processed.replace(/e/g, 'Math.E');
+            processed = processed.replace(/\^/g, '**');
+
+            // Handle trigonometric functions (in degrees)
+            processed = processed.replace(/sin\(/g, 'Math.sin(Math.PI/180 *');
+            processed = processed.replace(/cos\(/g, 'Math.cos(Math.PI/180 *');
+            processed = processed.replace(/tan\(/g, 'Math.tan(Math.PI/180 *');
+
+            // Handle logarithms
+            processed = processed.replace(/ln\(/g, 'Math.log(');
+            processed = processed.replace(/log\(/g, 'Math.log10(');
+            processed = processed.replace(/√\(/g, 'Math.sqrt(');
+            
+            // Handle factorial (this is more complex)
+            processed = processed.replace(/(\d+)!/g, (match, number) => factorial(parseInt(number)));
+            
+            return processed;
+        }
+
+        function factorial(n) {
+            if (n < 0) return NaN; // Factorial is not defined for negative numbers
+            if (n === 0 || n === 1) return 1;
+            let result = 1;
+            for (let i = 2; i <= n; i++) {
+                result *= i;
+            }
+            return result;
+        }
+
+        function clearAll() {
+            currentExpression = '';
+            expressionDisplay.textContent = '';
+            resultDisplay.value = '0';
+            lastResult = '';
+        }
+
+        function backspace() {
+            currentExpression = currentExpression.slice(0, -1);
+            resultDisplay.value = currentExpression || '0';
+        }
+
+        function addToHistory(expression, result) {
+            const li = document.createElement('li');
+            li.innerHTML = `${expression} = <strong>${result}</strong>`;
+            li.dataset.expression = expression;
+            historyList.prepend(li); // Add to the top
+            
+            // Limit history to 10 items
+            if (historyList.children.length > 10) {
+                historyList.removeChild(historyList.lastChild);
+            }
+        }
+    });
+    </script>
+</body>
+</html>
