@@ -1,0 +1,459 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Image Cropper & Compressor Tool</title>
+    <meta name="description" content="A free, online image cropper and compressor. Easily crop, resize, and reduce the file size of your JPG & PNG images right in your browser. Fast, secure, and mobile-friendly.">
+    <meta name="keywords" content="image cropper, image compressor, crop image, resize image, compress jpeg, reduce image size, online tool, free image editor, photo cropper">
+
+    <!-- External Libraries (Cropper.js) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.6.1/cropper.min.js" defer></script>
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- =========== EMBEDDED CSS =========== -->
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --primary-blue-hover: #0056b3;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --text-color: #495057;
+            --white: #ffffff;
+            --border-radius: 8px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .tool-container {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            margin-bottom: 2rem;
+            color: #6c757d;
+        }
+
+        /* --- Upload Placeholder --- */
+        .upload-placeholder {
+            border: 3px dashed var(--medium-gray);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .upload-placeholder.dragover {
+            background-color: #eaf5ff;
+            border-color: var(--primary-blue);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-label {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .file-label:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        .drop-info {
+            margin-top: 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+
+        /* --- Cropper Area --- */
+        .cropper-wrapper {
+            margin-bottom: 2rem;
+        }
+
+        .image-container {
+            display: none; /* Hidden until image is loaded */
+            max-height: 60vh;
+            background-color: #f1f1f1; /* Checkerboard background for transparency */
+            background-image: linear-gradient(45deg, #ccc 25%, transparent 25%), 
+                              linear-gradient(-45deg, #ccc 25%, transparent 25%),
+                              linear-gradient(45deg, transparent 75%, #ccc 75%),
+                              linear-gradient(-45deg, transparent 75%, #ccc 75%);
+            background-size: 20px 20px;
+            background-position: 0 0, 0 10px, 10px -10px, -10px 0px;
+        }
+
+        #image-to-crop {
+            display: block;
+            max-width: 100%;
+        }
+
+        /* Cropper.js overrides */
+        .cropper-view-box,
+        .cropper-face {
+            box-shadow: 0 0 0 1px var(--primary-blue);
+            border-radius: 0;
+        }
+        .cropper-line {
+            background-color: var(--primary-blue);
+            opacity: 0.5;
+        }
+        .cropper-point {
+            background-color: var(--primary-blue);
+        }
+
+        /* --- Controls --- */
+        .controls {
+            display: none; /* Hidden until image is loaded */
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+        }
+
+        .control-group {
+            text-align: left;
+        }
+
+        .control-group label {
+            font-weight: 500;
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--dark-gray);
+        }
+
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .aspect-btn {
+            background-color: var(--light-gray);
+            border: 1px solid var(--medium-gray);
+            padding: 8px 16px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s, color 0.3s;
+        }
+
+        .aspect-btn.active, .aspect-btn:hover {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        #quality-slider {
+            width: 100%;
+            cursor: pointer;
+        }
+        .control-group small {
+            display: block;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .action-btn {
+            background-color: #28a745;
+            color: var(--white);
+            padding: 15px 30px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s;
+            width: 100%;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background-color: #218838;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .tool-container {
+                padding: 1.5rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tool-container {
+                padding: 1rem;
+            }
+            .upload-placeholder {
+                padding: 2rem 1rem;
+            }
+            .button-group {
+                justify-content: center;
+            }
+            .action-btn {
+                padding: 12px 20px;
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tool-container">
+        <header>
+            <h1>Image Cropper & Compressor</h1>
+            <p>Upload an image, crop it to perfection, and download the compressed version.</p>
+        </header>
+
+        <main class="cropper-wrapper">
+            <!-- This area is for uploading the image -->
+            <div id="upload-placeholder" class="upload-placeholder">
+                <label for="file-input" class="file-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Choose an Image</span>
+                </label>
+                <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp">
+                <p class="drop-info">or drag & drop it here</p>
+            </div>
+
+            <!-- This area will contain the image to be cropped -->
+            <div class="image-container" id="image-container">
+                <img id="image-to-crop" alt="Image to crop">
+            </div>
+        </main>
+        
+        <!-- Controls are hidden until an image is uploaded -->
+        <div class="controls" id="controls">
+            <div class="control-group">
+                <label>Aspect Ratio</label>
+                <div class="button-group">
+                    <button id="aspect-free" class="aspect-btn active">Free</button>
+                    <button id="aspect-1-1" class="aspect-btn">1:1</button>
+                    <button id="aspect-4-3" class="aspect-btn">4:3</button>
+                    <button id="aspect-16-9" class="aspect-btn">16:9</button>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label for="quality-slider">Compression Quality: <span id="quality-value">0.9</span></label>
+                <input type="range" id="quality-slider" min="0.1" max="1" step="0.05" value="0.9">
+                <small>Applies to JPEG/WEBP formats. PNGs are lossless.</small>
+            </div>
+            
+            <button id="download-btn" class="action-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                <span>Crop & Download</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- =========== EMBEDDED JAVASCRIPT =========== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const fileInput = document.getElementById('file-input');
+            const uploadPlaceholder = document.getElementById('upload-placeholder');
+            const imageContainer = document.getElementById('image-container');
+            const imageToCrop = document.getElementById('image-to-crop');
+            const controls = document.getElementById('controls');
+            const downloadBtn = document.getElementById('download-btn');
+            const qualitySlider = document.getElementById('quality-slider');
+            const qualityValue = document.getElementById('quality-value');
+            
+            // Aspect Ratio Buttons
+            const aspectButtons = document.querySelectorAll('.aspect-btn');
+
+            let cropper = null;
+            let originalFileName = '';
+            let originalFileType = 'image/jpeg'; // Default
+
+            // --- Functions ---
+
+            // Initialize or re-initialize the cropper
+            function initCropper(file) {
+                originalFileName = file.name.split('.').slice(0, -1).join('.');
+                originalFileType = file.type;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    imageToCrop.src = e.target.result;
+                    
+                    // Show the image container and hide the upload placeholder
+                    uploadPlaceholder.style.display = 'none';
+                    imageContainer.style.display = 'block';
+
+                    // Destroy previous cropper instance if it exists
+                    if (cropper) {
+                        cropper.destroy();
+                    }
+
+                    // Initialize Cropper.js
+                    cropper = new Cropper(imageToCrop, {
+                        viewMode: 1,
+                        dragMode: 'move',
+                        autoCropArea: 0.8,
+                        aspectRatio: NaN, // Free aspect ratio by default
+                        background: false,
+                        responsive: true,
+                        restore: false,
+                        checkOrientation: false,
+                        ready() {
+                            // Show controls once cropper is ready
+                            controls.style.display = 'flex';
+                        }
+                    });
+                };
+                reader.readAsDataURL(file);
+            }
+            
+            // Handle File Input (Click or Drag/Drop)
+            fileInput.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    initCropper(file);
+                } else {
+                    alert('Please select a valid image file (PNG, JPG, WEBP).');
+                }
+            });
+
+            // Drag and Drop functionality
+            uploadPlaceholder.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadPlaceholder.classList.add('dragover');
+            });
+
+            uploadPlaceholder.addEventListener('dragleave', () => {
+                uploadPlaceholder.classList.remove('dragover');
+            });
+
+            uploadPlaceholder.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadPlaceholder.classList.remove('dragover');
+                const file = e.dataTransfer.files[0];
+                if (file && file.type.startsWith('image/')) {
+                    initCropper(file);
+                } else {
+                    alert('Please select a valid image file (PNG, JPG, WEBP).');
+                }
+            });
+
+            // --- Control Event Listeners ---
+
+            // Aspect Ratio
+            aspectButtons.forEach(button => {
+                button.addEventListener('click', (e) => {
+                    // Remove active class from all buttons
+                    aspectButtons.forEach(btn => btn.classList.remove('active'));
+                    // Add active class to the clicked button
+                    e.target.classList.add('active');
+
+                    let ratio = NaN;
+                    const aspectId = e.target.id;
+                    if (aspectId === 'aspect-1-1') ratio = 1 / 1;
+                    else if (aspectId === 'aspect-4-3') ratio = 4 / 3;
+                    else if (aspectId === 'aspect-16-9') ratio = 16 / 9;
+                    
+                    if (cropper) {
+                        cropper.setAspectRatio(ratio);
+                    }
+                });
+            });
+
+            // Compression Quality Slider
+            qualitySlider.addEventListener('input', (e) => {
+                qualityValue.textContent = parseFloat(e.target.value).toFixed(2);
+            });
+
+            // Download Button
+            downloadBtn.addEventListener('click', () => {
+                if (!cropper) return;
+
+                const quality = parseFloat(qualitySlider.value);
+                let mimeType = originalFileType;
+                let fileExtension = 'png';
+
+                // Use JPEG for compression, unless the original is PNG and user wants high quality
+                if (originalFileType !== 'image/png' || quality < 1) {
+                    mimeType = 'image/jpeg';
+                    fileExtension = 'jpg';
+                }
+                
+                // Get the cropped canvas from Cropper.js
+                const croppedCanvas = cropper.getCroppedCanvas();
+
+                if (!croppedCanvas) {
+                    alert('Could not get cropped canvas.');
+                    return;
+                }
+
+                // Convert canvas to a data URL with the specified quality
+                croppedCanvas.toBlob((blob) => {
+                    const downloadUrl = URL.createObjectURL(blob);
+                    
+                    // Create a temporary link to trigger the download
+                    const a = document.createElement('a');
+                    a.href = downloadUrl;
+                    a.download = `${originalFileName}-cropped.${fileExtension}`;
+                    document.body.appendChild(a);
+                    a.click();
+                    
+                    // Clean up
+                    document.body.removeChild(a);
+                    URL.revokeObjectURL(downloadUrl);
+
+                }, mimeType, quality);
+            });
+        });
+    </script>
+
+</body>
+</html>
