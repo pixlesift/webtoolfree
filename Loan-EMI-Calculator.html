@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Loan EMI Calculator | Calculate Your Monthly Loan Payment</title>
+    <meta name="description" content="Free online Loan EMI Calculator to determine your equated monthly installment. Input loan amount, interest rate, and tenure to find your monthly payment, total interest, and total payment.">
+    <meta name="keywords" content="EMI calculator, loan calculator, monthly installment, personal loan EMI, car loan EMI, home loan EMI, interest calculator, loan payment calculator">
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-blue: #007BFF;
+            --light-blue: #EBF5FF;
+            --dark-blue: #0056b3;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --medium-gray: #CED4DA;
+            --dark-gray: #495057;
+            --danger-red: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tool-container {
+            background-color: var(--white);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 550px;
+        }
+        
+        h1 { color: var(--primary-blue); margin-top: 0; margin-bottom: 10px; text-align: center; }
+        .subtitle { margin-top: 0; margin-bottom: 30px; color: #6c757d; text-align: center; }
+
+        .input-group { margin-bottom: 20px; }
+        .input-group label { font-weight: 500; display: block; margin-bottom: 8px; }
+        .input-group input {
+            width: 100%; padding: 12px; border: 1px solid var(--medium-gray);
+            border-radius: 8px; font-size: 1em; box-sizing: border-box;
+        }
+        
+        input[type="range"] {
+            -webkit-appearance: none; appearance: none; width: 100%; height: 8px;
+            background: var(--light-blue); border-radius: 5px; outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none; appearance: none; width: 20px; height: 20px;
+            background: var(--primary-blue); cursor: pointer; border-radius: 50%;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px; height: 20px; background: var(--primary-blue);
+            cursor: pointer; border-radius: 50%; border: none;
+        }
+
+        .action-btn {
+            width: 100%; padding: 15px; margin-top: 10px; background-color: var(--primary-blue);
+            color: var(--white); font-size: 1.1em; font-weight: 500; border-radius: 8px;
+            border: none; cursor: pointer; transition: all 0.3s ease;
+        }
+        .action-btn:hover { background-color: var(--dark-blue); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
+
+        #error-message { color: var(--danger-red); text-align: center; height: 20px; font-size: 0.9em; font-weight: 500; }
+        
+        .result-area { display: none; margin-top: 30px; }
+        .result-main { text-align: center; margin-bottom: 25px; }
+        .result-main h3 { margin: 0; color: var(--dark-gray); font-weight: 500; }
+        #emiValue { font-size: 3em; font-weight: 700; color: var(--primary-blue); margin: 5px 0; }
+        
+        .result-breakdown { display: flex; justify-content: space-between; margin-bottom: 25px; }
+        .breakdown-item {
+            padding: 15px; background-color: var(--light-gray); border-radius: 8px;
+            text-align: center; width: 48%;
+        }
+        .breakdown-item label { display: block; margin-bottom: 5px; font-weight: 500; }
+        .breakdown-item span { font-weight: 600; font-size: 1.2em; }
+        
+        .chart-container { max-width: 250px; margin: auto; }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .tool-container { padding: 20px; }
+            h1 { font-size: 1.8em; }
+            .result-breakdown { flex-direction: column; gap: 10px; }
+            .breakdown-item { width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- HTML STRUCTURE --- -->
+    <div class="tool-container">
+        <h1>Loan EMI Calculator</h1>
+        <p class="subtitle">Find out your monthly payment for any loan.</p>
+
+        <div class="input-group">
+            <label for="loanAmount">Loan Amount ($)</label>
+            <input type="number" id="loanAmount" placeholder="e.g., 500000">
+        </div>
+
+        <div class="input-group">
+            <label for="interestRate">Interest Rate (% p.a.)</label>
+            <input type="number" id="interestRate" step="0.01" placeholder="e.g., 7.5">
+        </div>
+
+        <div class="input-group">
+            <label for="loanTenure">Loan Tenure: <span id="tenureValue">15</span> Years</label>
+            <input type="range" id="loanTenure" min="1" max="30" value="15">
+        </div>
+
+        <div id="error-message"></div>
+        <button id="calculateBtn" class="action-btn">Calculate EMI</button>
+
+        <div class="result-area" id="resultArea">
+            <div class="result-main">
+                <h3>Your Monthly EMI</h3>
+                <div id="emiValue">$0</div>
+            </div>
+            
+            <div class="result-breakdown">
+                <div class="breakdown-item">
+                    <label>Total Interest</label>
+                    <span id="totalInterest">$0</span>
+                </div>
+                <div class="breakdown-item">
+                    <label>Total Payment</label>
+                    <span id="totalPayment">$0</span>
+                </div>
+            </div>
+
+            <div class="chart-container">
+                <canvas id="resultChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const loanAmountInput = document.getElementById('loanAmount');
+            const interestRateInput = document.getElementById('interestRate');
+            const loanTenureInput = document.getElementById('loanTenure');
+            const tenureValueSpan = document.getElementById('tenureValue');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const errorMessage = document.getElementById('error-message');
+            
+            const resultArea = document.getElementById('resultArea');
+            const emiValueEl = document.getElementById('emiValue');
+            const totalInterestEl = document.getElementById('totalInterest');
+            const totalPaymentEl = document.getElementById('totalPayment');
+            const chartCanvas = document.getElementById('resultChart');
+            
+            let myChart = null; // To hold the chart instance
+
+            // --- Event Listeners ---
+            loanTenureInput.addEventListener('input', () => {
+                tenureValueSpan.textContent = loanTenureInput.value;
+            });
+            
+            calculateBtn.addEventListener('click', calculateAndDisplay);
+
+            // --- Main Calculation Function ---
+            function calculateAndDisplay() {
+                const P = parseFloat(loanAmountInput.value);
+                const annualRate = parseFloat(interestRateInput.value);
+                const tenureYears = parseInt(loanTenureInput.value);
+
+                // --- Validation ---
+                if (!P || !annualRate || !tenureYears || P <= 0 || annualRate <= 0 || tenureYears <= 0) {
+                    errorMessage.textContent = 'Please enter valid, positive numbers for all fields.';
+                    resultArea.style.display = 'none';
+                    return;
+                }
+                errorMessage.textContent = ''; // Clear error
+
+                // --- EMI Calculation ---
+                const r = (annualRate / 12) / 100; // Monthly interest rate
+                const n = tenureYears * 12; // Total number of months
+
+                const emi = (P * r * Math.pow(1 + r, n)) / (Math.pow(1 + r, n) - 1);
+                
+                const totalPayment = emi * n;
+                const totalInterest = totalPayment - P;
+
+                // --- Display Results ---
+                const currencyOptions = { style: 'currency', currency: 'USD' };
+                emiValueEl.textContent = emi.toLocaleString('en-US', currencyOptions);
+                totalInterestEl.textContent = totalInterest.toLocaleString('en-US', currencyOptions);
+                totalPaymentEl.textContent = totalPayment.toLocaleString('en-US', currencyOptions);
+                
+                resultArea.style.display = 'block';
+
+                // --- Update Chart ---
+                updateChart(P, totalInterest);
+            }
+
+            function updateChart(principal, interest) {
+                const ctx = chartCanvas.getContext('2d');
+                
+                // Destroy the old chart instance before creating a new one
+                if (myChart) {
+                    myChart.destroy();
+                }
+
+                myChart = new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Principal Amount', 'Total Interest'],
+                        datasets: [{
+                            data: [principal, interest],
+                            backgroundColor: [
+                                'var(--primary-blue)',
+                                'var(--light-blue)'
+                            ],
+                            borderColor: [
+                                'var(--primary-blue)',
+                                'var(--light-blue)'
+                            ],
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        cutout: '70%',
+                        plugins: {
+                            legend: {
+                                position: 'bottom',
+                                labels: {
+                                    font: { family: "'Poppins', sans-serif" }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
