@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags for Ranking -->
+    <title>Online Text Sorter Tool - Alphabetize, Sort, and Shuffle Lists</title>
+    <meta name="description" content="A free and powerful online text and list sorter. Sort lines alphabetically, by length, numerically, or shuffle them randomly. Options for case-sensitivity, and removing duplicates and empty lines.">
+    <meta name="keywords" content="text sorter, list sorter, sort text, alphabetize list, sort lines, line sorter, randomizer, shuffle list, numeric sort, online tool, text utility">
+
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        /* --- Sorter Wrapper --- */
+        .sorter-wrapper {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .text-area-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+            text-align: left;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 350px;
+            padding: 15px;
+            font-size: 1rem;
+            font-family: 'Menlo', 'Consolas', monospace;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            resize: vertical;
+            line-height: 1.6;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        #text-output {
+            background-color: var(--light-bg);
+        }
+
+        /* --- Controls & Options --- */
+        .controls {
+            grid-column: 1 / -1; /* Span both columns */
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .options-group {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+            padding: 10px 0;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .option-item input[type="checkbox"] {
+            width: 1.2em;
+            height: 1.2em;
+            accent-color: var(--primary-color);
+        }
+
+        .utility-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-utility {
+            background-color: var(--secondary-color);
+        }
+        .btn-utility:hover {
+            background-color: #5a6268;
+        }
+
+        /* --- Stats --- */
+        .stats {
+            display: flex;
+            justify-content: space-evenly;
+            padding-top: 10px;
+        }
+
+        .stat-item {
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .stat-item span {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            header h1 { font-size: 2rem; }
+            .sorter-wrapper {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+            .button-group {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Text Sorter</h1>
+            <p>Easily sort your lists. Alphabetize, sort by length, or shuffle your text lines in seconds.</p>
+        </header>
+
+        <main>
+            <div class="controls">
+                <div class="button-group">
+                    <button id="btn-sort-az" class="btn">Sort A-Z</button>
+                    <button id="btn-sort-za" class="btn">Sort Z-A</button>
+                    <button id="btn-sort-length-asc" class="btn">Sort by Length (Short to Long)</button>
+                    <button id="btn-sort-length-desc" class="btn">Sort by Length (Long to Short)</button>
+                    <button id="btn-sort-numeric" class="btn">Sort Numerically</button>
+                    <button id="btn-sort-random" class="btn">Shuffle Randomly</button>
+                </div>
+                <div class="options-group">
+                    <label class="option-item"><input type="checkbox" id="opt-case-sensitive"> Case Sensitive</label>
+                    <label class="option-item"><input type="checkbox" id="opt-remove-empty" checked> Remove Empty Lines</label>
+                    <label class="option-item"><input type="checkbox" id="opt-remove-duplicates"> Remove Duplicate Lines</label>
+                </div>
+                <div class="utility-buttons">
+                     <button id="btn-copy" class="btn btn-utility">Copy Results</button>
+                     <button id="btn-clear" class="btn btn-utility">Clear All</button>
+                </div>
+            </div>
+
+            <div class="sorter-wrapper">
+                <div class="text-area-container">
+                    <h3>Input <span class="stats">(Lines: <span id="lines-before">0</span>)</span></h3>
+                    <textarea id="text-input" placeholder="Paste your list or text here..."></textarea>
+                </div>
+                <div class="text-area-container">
+                    <h3>Output <span class="stats">(Lines: <span id="lines-after">0</span>)</span></h3>
+                    <textarea id="text-output" readonly placeholder="Sorted text will appear here..."></textarea>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const textInput = document.getElementById('text-input');
+            const textOutput = document.getElementById('text-output');
+            
+            // Sort Buttons
+            const sortButtons = {
+                az: document.getElementById('btn-sort-az'),
+                za: document.getElementById('btn-sort-za'),
+                lengthAsc: document.getElementById('btn-sort-length-asc'),
+                lengthDesc: document.getElementById('btn-sort-length-desc'),
+                numeric: document.getElementById('btn-sort-numeric'),
+                random: document.getElementById('btn-sort-random'),
+            };
+
+            // Options
+            const optCaseSensitive = document.getElementById('opt-case-sensitive');
+            const optRemoveEmpty = document.getElementById('opt-remove-empty');
+            const optRemoveDuplicates = document.getElementById('opt-remove-duplicates');
+            
+            // Utility
+            const btnCopy = document.getElementById('btn-copy');
+            const btnClear = document.getElementById('btn-clear');
+
+            // Stats
+            const linesBeforeStat = document.getElementById('lines-before');
+            const linesAfterStat = document.getElementById('lines-after');
+
+            // --- Main Sort Logic ---
+            const sortText = (sortType) => {
+                // 1. Get initial lines and update "before" stats
+                let lines = textInput.value.split('\n');
+                linesBeforeStat.textContent = lines.filter(line => line.trim() !== '').length;
+
+                // 2. Apply Pre-processing Options
+                if (optRemoveEmpty.checked) {
+                    lines = lines.filter(line => line.trim() !== '');
+                }
+
+                if (optRemoveDuplicates.checked) {
+                    const seen = new Set();
+                    lines = lines.filter(line => {
+                        const key = optCaseSensitive.checked ? line : line.toLowerCase();
+                        if (seen.has(key)) {
+                            return false;
+                        } else {
+                            seen.add(key);
+                            return true;
+                        }
+                    });
+                }
+                
+                // 3. Perform Sorting based on type
+                const collator = new Intl.Collator(undefined, {
+                    numeric: true,
+                    sensitivity: optCaseSensitive.checked ? 'variant' : 'base'
+                });
+
+                switch (sortType) {
+                    case 'az':
+                        lines.sort(collator.compare);
+                        break;
+                    case 'za':
+                        lines.sort(collator.compare).reverse();
+                        break;
+                    case 'lengthAsc':
+                        lines.sort((a, b) => a.length - b.length);
+                        break;
+                    case 'lengthDesc':
+                        lines.sort((a, b) => b.length - a.length);
+                        break;
+                    case 'numeric':
+                        lines.sort((a, b) => {
+                            const numA = parseFloat(a) || 0;
+                            const numB = parseFloat(b) || 0;
+                            return numA - numB;
+                        });
+                        break;
+                    case 'random':
+                        // Fisher-Yates (aka Knuth) Shuffle
+                        for (let i = lines.length - 1; i > 0; i--) {
+                            const j = Math.floor(Math.random() * (i + 1));
+                            [lines[i], lines[j]] = [lines[j], lines[i]];
+                        }
+                        break;
+                }
+
+                // 4. Update Output
+                textOutput.value = lines.join('\n');
+                linesAfterStat.textContent = lines.length;
+            };
+
+            // --- Event Listeners ---
+            for (const [type, button] of Object.entries(sortButtons)) {
+                button.addEventListener('click', () => sortText(type));
+            }
+
+            textInput.addEventListener('input', () => {
+                const lines = textInput.value.split('\n').filter(line => line.trim() !== '');
+                linesBeforeStat.textContent = lines.length;
+            });
+
+            btnClear.addEventListener('click', () => {
+                textInput.value = '';
+                textOutput.value = '';
+                linesBeforeStat.textContent = '0';
+                linesAfterStat.textContent = '0';
+            });
+
+            btnCopy.addEventListener('click', () => {
+                if (navigator.clipboard && textOutput.value) {
+                    navigator.clipboard.writeText(textOutput.value).then(() => {
+                        const originalText = btnCopy.textContent;
+                        btnCopy.textContent = 'Copied!';
+                        btnCopy.style.backgroundColor = 'var(--success-color)';
+                        setTimeout(() => {
+                            btnCopy.textContent = originalText;
+                            btnCopy.style.backgroundColor = 'var(--secondary-color)';
+                        }, 2000);
+                    });
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
