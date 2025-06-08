@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags for High Ranking -->
+    <title>Online Code Minifier - Compress HTML, CSS & JavaScript Instantly</title>
+    <meta name="description" content="A free and powerful online code minifier to instantly compress your HTML, CSS, and JavaScript. Reduce file size, improve website loading speed, and optimize your code with one click.">
+    <meta name="keywords" content="html minifier, css minifier, js minifier, javascript minifier, code compressor, minify code, online minifier, html compressor, css compressor, js compressor, reduce file size, code optimizer, web performance tool, free tool, terser online, clean-css online">
+
+    <!-- Minification Libraries from CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/html-minifier-terser@7.1.0/dist/htmlminifier.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/clean-css@5.3.1/dist/clean-css.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/terser@5.15.1/dist/bundle.min.js"></script>
+
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1100px;
+            text-align: center;
+        }
+
+        header { margin-bottom: 20px; }
+        header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 10px; }
+        header p { font-size: 1.1rem; color: var(--secondary-color); max-width: 800px; margin: 0 auto; }
+
+        .minifier-wrapper {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+        
+        /* --- Tabs --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--secondary-color);
+            position: relative;
+            transition: color 0.3s;
+        }
+        .tab-button.active { color: var(--primary-color); }
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px; left: 0;
+            width: 100%; height: 2px;
+            background-color: var(--primary-color);
+        }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+        
+        .code-panels { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .panel h2 { text-align: left; margin-bottom: 10px; font-size: 1.2rem; }
+        .panel textarea {
+            width: 100%;
+            height: 400px;
+            padding: 15px;
+            font-size: 0.9rem;
+            font-family: 'Menlo', 'Consolas', 'Courier New', monospace;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            resize: vertical;
+            line-height: 1.5;
+        }
+        .panel textarea:focus { outline: none; border-color: var(--primary-color); }
+        #output-code { background-color: var(--light-bg); }
+
+        /* --- Controls & Stats --- */
+        .controls {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        #minify-btn {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        #minify-btn:hover { background-color: var(--primary-hover); transform: translateY(-2px); }
+        #minify-btn:disabled { background-color: var(--secondary-color); cursor: not-allowed; transform: none; }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            max-width: 600px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .stat-item { text-align: center; color: var(--secondary-color); }
+        .stat-item span { display: block; font-size: 1.3rem; font-weight: 700; color: var(--text-color); }
+        .stat-item .savings { color: var(--success-color); }
+
+        .utility-buttons { display: flex; gap: 15px; width: 100%; max-width: 400px; }
+        .btn-utility {
+            flex: 1;
+            padding: 10px 15px;
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--white);
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .btn-utility:hover { background-color: #5a6268; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 800px) {
+            .code-panels { grid-template-columns: 1fr; }
+            .panel textarea { height: 300px; }
+        }
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            header h1 { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Online Code Minifier</h1>
+            <p>Paste your HTML, CSS, or JavaScript code below to compress it. Reducing code size can significantly improve your website's performance and loading speed.</p>
+        </header>
+
+        <div class="minifier-wrapper">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="html">HTML</button>
+                <button class="tab-button" data-tab="css">CSS</button>
+                <button class="tab-button" data-tab="js">JavaScript</button>
+            </div>
+
+            <div class="tab-content active" id="html">
+                <div class="code-panels">
+                    <div class="panel">
+                        <h2>Input HTML</h2>
+                        <textarea id="input-html" placeholder="Paste your HTML code here..."></textarea>
+                    </div>
+                    <div class="panel">
+                        <h2>Minified Output</h2>
+                        <textarea id="output-html" readonly placeholder="Minified HTML will appear here..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="css">
+                <div class="code-panels">
+                    <div class="panel">
+                        <h2>Input CSS</h2>
+                        <textarea id="input-css" placeholder="Paste your CSS code here..."></textarea>
+                    </div>
+                    <div class="panel">
+                        <h2>Minified Output</h2>
+                        <textarea id="output-css" readonly placeholder="Minified CSS will appear here..."></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-content" id="js">
+                <div class="code-panels">
+                    <div class="panel">
+                        <h2>Input JavaScript</h2>
+                        <textarea id="input-js" placeholder="Paste your JavaScript code here..."></textarea>
+                    </div>
+                    <div class="panel">
+                        <h2>Minified Output</h2>
+                        <textarea id="output-js" readonly placeholder="Minified JavaScript will appear here..."></textarea>
+                    </div>
+                </div>
+            </div>
+
+            <div class="controls">
+                <button id="minify-btn">Minify Code</button>
+                <div class="stats">
+                    <div class="stat-item">Original Size <span id="original-size">0 B</span></div>
+                    <div class="stat-item">Minified Size <span id="minified-size">0 B</span></div>
+                    <div class="stat-item">Savings <span id="savings" class="savings">0%</span></div>
+                </div>
+                <div class="utility-buttons">
+                    <button id="copy-btn" class="btn-utility">Copy Result</button>
+                    <button id="clear-btn" class="btn-utility">Clear All</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+            const minifyBtn = document.getElementById('minify-btn');
+            const copyBtn = document.getElementById('copy-btn');
+            const clearBtn = document.getElementById('clear-btn');
+            
+            const inputs = {
+                html: document.getElementById('input-html'),
+                css: document.getElementById('input-css'),
+                js: document.getElementById('input-js'),
+            };
+            const outputs = {
+                html: document.getElementById('output-html'),
+                css: document.getElementById('output-css'),
+                js: document.getElementById('output-js'),
+            };
+            
+            const originalSizeEl = document.getElementById('original-size');
+            const minifiedSizeEl = document.getElementById('minified-size');
+            const savingsEl = document.getElementById('savings');
+            
+            let activeTab = 'html';
+
+            // --- Tab Switching Logic ---
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    activeTab = tab.dataset.tab;
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                    tabContents.forEach(c => c.classList.remove('active'));
+                    document.getElementById(activeTab).classList.add('active');
+                });
+            });
+
+            // --- Utility Functions ---
+            const formatBytes = (bytes) => {
+                if (bytes === 0) return '0 B';
+                const k = 1024;
+                const sizes = ['B', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            };
+
+            const updateStats = (originalCode, minifiedCode) => {
+                const originalBytes = new Blob([originalCode]).size;
+                const minifiedBytes = new Blob([minifiedCode]).size;
+                
+                if (originalBytes === 0) {
+                    originalSizeEl.textContent = '0 B';
+                    minifiedSizeEl.textContent = '0 B';
+                    savingsEl.textContent = '0%';
+                    return;
+                }
+                
+                const savings = 100 - (minifiedBytes / originalBytes) * 100;
+                originalSizeEl.textContent = formatBytes(originalBytes);
+                minifiedSizeEl.textContent = formatBytes(minifiedBytes);
+                savingsEl.textContent = savings.toFixed(1) + '%';
+            };
+
+            // --- Core Minification Logic ---
+            const handleMinify = async () => {
+                const inputCode = inputs[activeTab].value;
+                const outputArea = outputs[activeTab];
+
+                if (!inputCode.trim()) {
+                    outputArea.value = 'Input code is empty.';
+                    updateStats('', '');
+                    return;
+                }
+
+                minifyBtn.textContent = 'Minifying...';
+                minifyBtn.disabled = true;
+                outputArea.value = '';
+
+                try {
+                    let minifiedCode = '';
+                    switch (activeTab) {
+                        case 'html':
+                            minifiedCode = await HTMLMinifier.minify(inputCode, {
+                                collapseWhitespace: true,
+                                removeComments: true,
+                                removeAttributeQuotes: true,
+                                removeRedundantAttributes: true,
+                                removeScriptTypeAttributes: true,
+                                removeStyleLinkTypeAttributes: true,
+                                useShortDoctype: true,
+                                minifyCSS: true,
+                                minifyJS: true
+                            });
+                            break;
+                        case 'css':
+                            const cssOutput = new CleanCSS({}).minify(inputCode);
+                            if (cssOutput.errors && cssOutput.errors.length > 0) {
+                                throw new Error(cssOutput.errors.join('\n'));
+                            }
+                            if (cssOutput.warnings && cssOutput.warnings.length > 0) {
+                                console.warn('CleanCSS Warnings:', cssOutput.warnings);
+                            }
+                            minifiedCode = cssOutput.styles;
+                            break;
+                        case 'js':
+                            const jsOutput = await Terser.minify(inputCode);
+                             if (jsOutput.error) {
+                                throw jsOutput.error;
+                            }
+                            minifiedCode = jsOutput.code;
+                            break;
+                    }
+                    outputArea.value = minifiedCode;
+                    updateStats(inputCode, minifiedCode);
+
+                } catch (error) {
+                    outputArea.value = `Error minifying code:\n\n${error.message || error}`;
+                    updateStats(inputCode, '');
+                } finally {
+                    minifyBtn.textContent = 'Minify Code';
+                    minifyBtn.disabled = false;
+                }
+            };
+            
+            minifyBtn.addEventListener('click', handleMinify);
+
+            // --- Copy and Clear ---
+            copyBtn.addEventListener('click', () => {
+                const outputCode = outputs[activeTab].value;
+                if (navigator.clipboard && outputCode && !outputCode.startsWith('Error')) {
+                    navigator.clipboard.writeText(outputCode).then(() => {
+                        const originalText = copyBtn.textContent;
+                        copyBtn.textContent = 'Copied!';
+                        setTimeout(() => { copyBtn.textContent = originalText; }, 2000);
+                    });
+                }
+            });
+
+            clearBtn.addEventListener('click', () => {
+                inputs[activeTab].value = '';
+                outputs[activeTab].value = '';
+                updateStats('', '');
+            });
+        });
+    </script>
+</body>
+</html>
