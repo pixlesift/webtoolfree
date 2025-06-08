@@ -1,1 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+    <!-- SEO Meta Tags for Ranking -->
+    <title>Online Text Reverser Tool - Reverse Words and Letters</title>
+    <meta name="description" content="A free online tool to reverse text, flip words, and reverse the order of words in a sentence. Perfect for fun, data manipulation, and more. Fast and easy to use.">
+    <meta name="keywords" content="text reverser, reverse text, word reverser, reverse string, flip text, backwards text, reverse words, online tool, text utility">
+
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1000px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        /* --- Reverser Wrapper --- */
+        .reverser-wrapper {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .text-area-container {
+            display: flex;
+            flex-direction: column;
+            text-align: left;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 300px;
+            padding: 15px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            resize: vertical;
+            line-height: 1.6;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        #text-output {
+            background-color: var(--light-bg);
+        }
+
+        /* --- Controls & Buttons --- */
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            white-space: nowrap;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-utility {
+            background-color: var(--secondary-color);
+        }
+        .btn-utility:hover {
+            background-color: #5a6268;
+        }
+
+        .utility-buttons {
+            margin-top: 15px;
+            border-top: 1px solid var(--border-color);
+            padding-top: 15px;
+        }
+
+        /* --- Stats --- */
+        .stats {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+            margin-top: 5px;
+        }
+
+        .stats span {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 850px) {
+            .reverser-wrapper {
+                grid-template-columns: 1fr;
+            }
+            .controls {
+                flex-direction: row;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            .utility-buttons {
+                 width: 100%;
+                 display: flex;
+                 margin-top: 0;
+                 border-top: none;
+                 padding-top: 0;
+            }
+            .btn { flex-grow: 1;}
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            header h1 { font-size: 2rem; }
+            .reverser-wrapper { padding: 15px; }
+            .controls {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Text Reverser</h1>
+            <p>Reverse text, swap the order of words, or flip the letters in each word instantly.</p>
+        </header>
+
+        <main class="reverser-wrapper">
+            <div class="text-area-container">
+                <h3>Input</h3>
+                <textarea id="text-input" placeholder="Type or paste text here..."></textarea>
+                <div class="stats">Characters: <span id="input-chars">0</span></div>
+            </div>
+
+            <div class="controls">
+                <button id="btn-reverse-text" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M8 3a5 5 0 1 1-4.546 2.914.5.5 0 0 0-.908-.417A6 6 0 1 0 8 2v1z"/><path d="M8 4.466V.534a.25.25 0 0 0-.41-.192L5.23 2.308a.25.25 0 0 0 0 .384l2.36 1.966A.25.25 0 0 0 8 4.466z"/></svg>
+                    Reverse Text
+                </button>
+                <button id="btn-reverse-words" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M1 8a7 7 0 1 0 14 0A7 7 0 0 0 1 8zm15 0A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM10 8a.5.5 0 0 0 .5-.5V3.707l2.146 2.147a.5.5 0 0 0 .708-.708l-3-3a.5.5 0 0 0-.708 0l-3 3a.5.5 0 1 0 .708.708L10 3.707V7.5a.5.5 0 0 0 .5.5zm-7 2.5a.5.5 0 0 1 .5.5v3.793l-2.146-2.147a.5.5 0 0 1-.708.708l3 3a.5.5 0 0 1 .708 0l3-3a.5.5 0 0 1-.708-.708L6 12.293V8.5a.5.5 0 0 1 .5-.5h2a.5.5 0 0 0 0-1h-2a.5.5 0 0 0-.5.5z"/></svg>
+                    Reverse Words
+                </button>
+                <button id="btn-flip-words" class="btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M10.854 4.646a.5.5 0 0 1 0 .708L7.707 8l3.147 3.146a.5.5 0 0 1-.708.708l-3.5-3.5a.5.5 0 0 1 0-.708l3.5-3.5a.5.5 0 0 1 .708 0z"/><path fill-rule="evenodd" d="M4.146 4.646a.5.5 0 0 0 0 .708L7.293 8l-3.147 3.146a.5.5 0 0 0 .708.708l3.5-3.5a.5.5 0 0 0 0-.708l-3.5-3.5a.5.5 0 0 0-.708 0z"/></svg>
+                    Flip Each Word
+                </button>
+                <div class="utility-buttons">
+                    <button id="btn-copy" class="btn btn-utility">Copy</button>
+                    <button id="btn-clear" class="btn btn-utility">Clear</button>
+                </div>
+            </div>
+
+            <div class="text-area-container">
+                <h3>Output</h3>
+                <textarea id="text-output" readonly placeholder="Reversed text will appear here..."></textarea>
+                <div class="stats">Characters: <span id="output-chars">0</span></div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const textInput = document.getElementById('text-input');
+            const textOutput = document.getElementById('text-output');
+            
+            const btnReverseText = document.getElementById('btn-reverse-text');
+            const btnReverseWords = document.getElementById('btn-reverse-words');
+            const btnFlipWords = document.getElementById('btn-flip-words');
+            
+            const btnCopy = document.getElementById('btn-copy');
+            const btnClear = document.getElementById('btn-clear');
+
+            const inputCharsStat = document.getElementById('input-chars');
+            const outputCharsStat = document.getElementById('output-chars');
+
+            // --- Core Logic ---
+            const reverseText = (text) => text.split('').reverse().join('');
+            const reverseWords = (text) => text.split(' ').reverse().join(' ');
+            const flipWords = (text) => text.split(' ').map(word => reverseText(word)).join(' ');
+
+            // --- Event Handlers ---
+            const performReverse = (reverseFunction) => {
+                const inputText = textInput.value;
+                const outputText = reverseFunction(inputText);
+                textOutput.value = outputText;
+                updateStats();
+            };
+            
+            btnReverseText.addEventListener('click', () => performReverse(reverseText));
+            btnReverseWords.addEventListener('click', () => performReverse(reverseWords));
+            btnFlipWords.addEventListener('click', () => performReverse(flipWords));
+
+            // --- Stats and Utilities ---
+            const updateStats = () => {
+                inputCharsStat.textContent = textInput.value.length;
+                outputCharsStat.textContent = textOutput.value.length;
+            };
+
+            textInput.addEventListener('input', updateStats);
+            
+            btnClear.addEventListener('click', () => {
+                textInput.value = '';
+                textOutput.value = '';
+                updateStats();
+            });
+
+            btnCopy.addEventListener('click', () => {
+                if (navigator.clipboard && textOutput.value) {
+                    navigator.clipboard.writeText(textOutput.value).then(() => {
+                        const originalText = btnCopy.textContent;
+                        btnCopy.textContent = 'Copied!';
+                        btnCopy.style.backgroundColor = 'var(--success-color)';
+                        setTimeout(() => {
+                            btnCopy.textContent = originalText;
+                            btnCopy.style.backgroundColor = 'var(--secondary-color)';
+                        }, 2000);
+                    });
+                }
+            });
+
+            // Initial stat calculation
+            updateStats();
+        });
+    </script>
+
+</body>
+</html>
