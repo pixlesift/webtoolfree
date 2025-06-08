@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Word & Character Counter | Online Text Analysis Tool</title>
+    <meta name="description" content="Count words, characters, sentences, lines, and paragraphs in your text instantly. Our free online tool also provides an estimated reading time, perfect for writers, students, and professionals.">
+    <meta name="keywords" content="word counter, character counter, count words, count characters, text counter, sentence counter, online word count, character count tool, reading time calculator">
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-blue: #007BFF;
+            --light-blue: #EBF5FF;
+            --dark-blue: #0056b3;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --medium-gray: #CED4DA;
+            --dark-gray: #495057;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tool-container {
+            background-color: var(--white);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 { color: var(--primary-blue); margin-top: 0; margin-bottom: 10px; text-align: center; }
+        .subtitle { margin-top: 0; margin-bottom: 25px; color: #6c757d; text-align: center; }
+        
+        /* Text Area */
+        #textInput {
+            width: 100%;
+            height: 250px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-gray);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        #textInput:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* Stats Area */
+        .stats-area {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+            gap: 15px;
+            margin-top: 25px;
+            padding: 20px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-item .value {
+            font-size: 1.8em;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        .stat-item .label {
+            font-size: 0.9em;
+            color: var(--dark-gray);
+        }
+
+        .action-btn {
+            width: 100%; padding: 12px; margin-top: 20px;
+            background-color: var(--primary-blue);
+            color: var(--white); border: none; border-radius: 8px;
+            font-size: 1em; font-weight: 500; cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .action-btn:hover { background-color: var(--dark-blue); }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .tool-container { padding: 20px; }
+            h1 { font-size: 1.8em; }
+            .stats-area { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- HTML STRUCTURE --- -->
+    <div class="tool-container">
+        <h1>Word & Character Counter</h1>
+        <p class="subtitle">Paste your text below to get instant stats.</p>
+
+        <textarea id="textInput" placeholder="Start typing or paste your text here..."></textarea>
+        
+        <div class="stats-area">
+            <div class="stat-item">
+                <div class="value" id="wordCount">0</div>
+                <div class="label">Words</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="charCount">0</div>
+                <div class="label">Characters</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="sentenceCount">0</div>
+                <div class="label">Sentences</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="paragraphCount">0</div>
+                <div class="label">Paragraphs</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="lineCount">0</div>
+                <div class="label">Lines</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="readingTime">0</div>
+                <div class="label">Reading Time</div>
+            </div>
+        </div>
+
+        <button class="action-btn" id="clearBtn">Clear Text</button>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const textInput = document.getElementById('textInput');
+            const clearBtn = document.getElementById('clearBtn');
+            const wordCountEl = document.getElementById('wordCount');
+            const charCountEl = document.getElementById('charCount');
+            const sentenceCountEl = document.getElementById('sentenceCount');
+            const paragraphCountEl = document.getElementById('paragraphCount');
+            const lineCountEl = document.getElementById('lineCount');
+            const readingTimeEl = document.getElementById('readingTime');
+
+            // --- Event Listeners ---
+            textInput.addEventListener('input', updateAllStats);
+            clearBtn.addEventListener('click', () => {
+                textInput.value = '';
+                updateAllStats();
+            });
+
+            // --- Main Update Function ---
+            function updateAllStats() {
+                const text = textInput.value;
+
+                // 1. Character Count
+                charCountEl.textContent = text.length;
+
+                // 2. Word Count
+                const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+                const wordCount = words.length;
+                wordCountEl.textContent = wordCount;
+
+                // 3. Sentence Count
+                const sentences = text.match(/[^\.!\?]+[\.!\?]+/g);
+                let sentenceCount = sentences ? sentences.length : 0;
+                // If there's text but no sentence-ending punctuation, count it as one sentence.
+                if (text.trim().length > 0 && sentenceCount === 0) {
+                    sentenceCount = 1;
+                }
+                sentenceCountEl.textContent = sentenceCount;
+
+                // 4. Paragraph Count
+                const paragraphs = text.split(/\n\s*\n/).filter(p => p.trim().length > 0);
+                paragraphCountEl.textContent = paragraphs.length || (text.trim().length > 0 ? 1 : 0);
+                
+                // 5. Line Count
+                lineCountEl.textContent = text ? text.split('\n').length : 0;
+
+                // 6. Reading Time (based on an average of 225 WPM)
+                const readingTime = Math.ceil(wordCount / 225);
+                readingTimeEl.textContent = `${readingTime} min`;
+            }
+            
+            // --- Initializer ---
+            updateAllStats(); // Run on page load to set initial state to 0
+        });
+    </script>
+</body>
+</html>
