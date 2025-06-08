@@ -1,0 +1,92 @@
+document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll('.tab-btn');
+    const uploadArea = document.getElementById('uploadArea');
+    const fileInput = document.getElementById('fileInput');
+    const uploadText = document.getElementById('uploadText');
+    const supportedFormats = document.getElementById('supportedFormats');
+    const statusArea = document.getElementById('statusArea');
+    const fileNameEl = document.getElementById('fileName');
+    const statusTextEl = document.getElementById('statusText');
+    const progressEl = document.getElementById('progress');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    let currentMode = 'pdf-to-word';
+
+    // Tab switching logic
+    tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            currentMode = tab.dataset.mode;
+            updateUIForMode();
+        });
+    });
+
+    function updateUIForMode() {
+        if (currentMode === 'pdf-to-word') {
+            uploadText.innerHTML = '<strong>Click to upload</strong> or drag and drop a PDF';
+            supportedFormats.textContent = 'Supports: .pdf';
+            fileInput.accept = '.pdf';
+        } else {
+            uploadText.innerHTML = '<strong>Click to upload</strong> or drag and drop a Word file';
+            supportedFormats.textContent = 'Supports: .doc, .docx';
+            fileInput.accept = '.doc,.docx';
+        }
+        // Reset file input and status on mode switch
+        fileInput.value = '';
+        statusArea.style.display = 'none';
+        uploadArea.style.display = 'block';
+        downloadBtn.classList.add('disabled');
+        downloadBtn.style.display = 'none';
+    }
+
+    // File upload logic
+    uploadArea.addEventListener('click', () => fileInput.click());
+
+    fileInput.addEventListener('change', (e) => {
+        if (e.target.files.length) {
+            handleFile(e.target.files[0]);
+        }
+    });
+
+    function handleFile(file) {
+        uploadArea.style.display = 'none';
+        statusArea.style.display = 'block';
+        downloadBtn.style.display = 'block';
+
+        fileNameEl.textContent = file.name;
+        statusTextEl.textContent = 'Uploading...';
+        progressEl.style.width = '0%';
+
+        // --- SIMULATION ---
+        // This simulates the upload and conversion process.
+        // In a real application, you would send the file to your server here.
+
+        // 1. Simulate Upload
+        setTimeout(() => {
+            progressEl.style.width = '50%';
+            statusTextEl.textContent = 'Converting...';
+        }, 1000);
+
+        // 2. Simulate Conversion
+        setTimeout(() => {
+            progressEl.style.width = '100%';
+            statusTextEl.textContent = 'Complete!';
+            statusTextEl.style.color = 'var(--success-green)';
+            downloadBtn.classList.remove('disabled');
+
+            // In a real app, the server would return a URL to the converted file.
+            // You would set the downloadBtn.href to that URL.
+            // For now, we'll just prevent the click.
+            downloadBtn.href = "#"; 
+            downloadBtn.onclick = (e) => {
+                e.preventDefault();
+                alert('Backend integration needed for actual download.');
+            };
+
+        }, 2500);
+    }
+    
+    // Initialize UI
+    updateUIForMode();
+});
