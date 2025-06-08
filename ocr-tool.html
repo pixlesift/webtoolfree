@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Image to Text (OCR) Tool - Extract Text from Images</title>
+    <meta name="description" content="Free online OCR tool to extract text from images and photos. Convert PNG, JPG, or WEBP files to editable text instantly. No registration required, fast and secure.">
+    <meta name="keywords" content="ocr, image to text, extract text from image, optical character recognition, photo to text converter, image text extractor, free ocr tool">
+
+    <!-- External Libraries (Tesseract.js for OCR) -->
+    <!-- The 'defer' attribute is important to prevent blocking page render -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js" defer></script>
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- =========== EMBEDDED CSS =========== -->
+    <style>
+        :root {
+            --primary-blue: #007bff;
+            --primary-blue-hover: #0056b3;
+            --light-gray: #f8f9fa;
+            --medium-gray: #e9ecef;
+            --dark-gray: #343a40;
+            --text-color: #495057;
+            --white: #ffffff;
+            --border-radius: 8px;
+            --success-green: #28a745;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .tool-container {
+            background-color: var(--white);
+            padding: 2rem;
+            border-radius: var(--border-radius);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 700px;
+            text-align: center;
+        }
+
+        header h1 {
+            color: var(--dark-gray);
+            margin-bottom: 0.5rem;
+        }
+
+        header p {
+            margin-bottom: 2rem;
+            color: #6c757d;
+        }
+
+        /* --- Upload Area --- */
+        .upload-placeholder {
+            border: 3px dashed var(--medium-gray);
+            border-radius: var(--border-radius);
+            padding: 3rem;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+
+        .upload-placeholder.dragover {
+            background-color: #eaf5ff;
+            border-color: var(--primary-blue);
+        }
+
+        #file-input {
+            display: none;
+        }
+
+        .file-label {
+            background-color: var(--primary-blue);
+            color: var(--white);
+            padding: 12px 24px;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            font-weight: 500;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+
+        .file-label:hover {
+            background-color: var(--primary-blue-hover);
+        }
+
+        .drop-info {
+            margin-top: 1rem;
+            color: #6c757d;
+            font-size: 0.9rem;
+        }
+        
+        /* --- Preview, Progress, and Output --- */
+        #image-preview-container {
+            display: none;
+            margin-bottom: 1.5rem;
+            max-height: 50vh;
+        }
+
+        #image-preview {
+            max-width: 100%;
+            max-height: 50vh;
+            border-radius: var(--border-radius);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        #progress-container {
+            display: none;
+            text-align: left;
+            margin: 1.5rem 0;
+            padding: 1rem;
+            border: 1px solid var(--medium-gray);
+            border-radius: var(--border-radius);
+        }
+        
+        #status-text {
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+        }
+
+        #progress-bar {
+            width: 100%;
+            height: 10px;
+            appearance: none;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        #progress-bar::-webkit-progress-bar {
+            background-color: var(--medium-gray);
+        }
+        #progress-bar::-webkit-progress-value {
+            background-color: var(--primary-blue);
+            transition: width 0.1s linear;
+        }
+
+        #output-container {
+            display: none;
+            text-align: left;
+            margin-top: 1.5rem;
+        }
+
+        #output-container label {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.75rem;
+            color: var(--dark-gray);
+        }
+
+        #output-text {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border-radius: var(--border-radius);
+            border: 1px solid var(--medium-gray);
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.95rem;
+            resize: vertical;
+            background-color: var(--light-gray);
+        }
+        
+        .output-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .action-btn {
+            flex-grow: 1;
+            padding: 12px;
+            border: none;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            transition: background-color 0.3s;
+        }
+        
+        .action-btn.primary {
+            background-color: var(--success-green);
+            color: var(--white);
+        }
+        .action-btn.primary:hover {
+            background-color: #218838;
+        }
+
+        .action-btn.secondary {
+            background-color: var(--medium-gray);
+            color: var(--dark-gray);
+        }
+        .action-btn.secondary:hover {
+            background-color: #d3d9df;
+        }
+
+        /* --- Responsive Design --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            .tool-container {
+                padding: 1.5rem;
+            }
+            header h1 {
+                font-size: 1.8rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tool-container {
+                padding: 1rem;
+            }
+            .upload-placeholder {
+                padding: 2rem 1rem;
+            }
+            .output-actions {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="tool-container">
+        <header>
+            <h1>Image to Text (OCR)</h1>
+            <p>Extract editable text from any image in just one click.</p>
+        </header>
+
+        <main>
+            <!-- Upload Area -->
+            <div id="upload-placeholder" class="upload-placeholder">
+                <label for="file-input" class="file-label">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Choose an Image</span>
+                </label>
+                <input type="file" id="file-input" accept="image/png, image/jpeg, image/webp">
+                <p class="drop-info">or drag & drop it here</p>
+            </div>
+
+            <!-- Image Preview -->
+            <div id="image-preview-container">
+                <img id="image-preview" src="#" alt="Image Preview">
+            </div>
+
+            <!-- Progress Bar -->
+            <div id="progress-container">
+                <p id="status-text">Processing image...</p>
+                <progress id="progress-bar" value="0" max="1"></progress>
+            </div>
+
+            <!-- Output Area -->
+            <div id="output-container">
+                <label for="output-text">Extracted Text:</label>
+                <textarea id="output-text" readonly>Your text will appear here.</textarea>
+                <div class="output-actions">
+                    <button id="copy-btn" class="action-btn primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                        <span>Copy Text</span>
+                    </button>
+                    <button id="download-btn" class="action-btn secondary">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                        <span>Download .txt</span>
+                    </button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- =========== EMBEDDED JAVASCRIPT =========== -->
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const fileInput = document.getElementById('file-input');
+            const uploadPlaceholder = document.getElementById('upload-placeholder');
+            const imagePreviewContainer = document.getElementById('image-preview-container');
+            const imagePreview = document.getElementById('image-preview');
+            const progressContainer = document.getElementById('progress-container');
+            const statusText = document.getElementById('status-text');
+            const progressBar = document.getElementById('progress-bar');
+            const outputContainer = document.getElementById('output-container');
+            const outputText = document.getElementById('output-text');
+            const copyBtn = document.getElementById('copy-btn');
+            const downloadBtn = document.getElementById('download-btn');
+            
+            let originalFileName = 'extracted-text';
+
+            // --- Main OCR Function ---
+            const runOCR = async (file) => {
+                // 1. Prepare UI
+                progressContainer.style.display = 'block';
+                outputContainer.style.display = 'none';
+                statusText.textContent = 'Initializing OCR engine...';
+                progressBar.value = 0;
+
+                // 2. Create a Tesseract Worker
+                const worker = await Tesseract.createWorker({
+                    logger: (m) => {
+                        // Update progress based on worker status
+                        if (m.status === 'recognizing text') {
+                            const progress = m.progress;
+                            statusText.textContent = `Recognizing Text... (${Math.round(progress * 100)}%)`;
+                            progressBar.value = progress;
+                        } else {
+                            // Capitalize first letter for display
+                            statusText.textContent = m.status.charAt(0).toUpperCase() + m.status.slice(1);
+                        }
+                    },
+                });
+
+                try {
+                    // 3. Load language, initialize, and recognize
+                    await worker.loadLanguage('eng');
+                    await worker.initialize('eng');
+                    const { data: { text } } = await worker.recognize(file);
+
+                    // 4. Display results
+                    outputText.value = text;
+                    progressContainer.style.display = 'none';
+                    outputContainer.style.display = 'block';
+
+                } catch (error) {
+                    console.error('OCR Error:', error);
+                    statusText.textContent = 'An error occurred during OCR.';
+                    progressBar.value = 0;
+                } finally {
+                    // 5. Important: Terminate the worker to free up resources
+                    await worker.terminate();
+                }
+            };
+            
+            // --- Event Handlers ---
+            const handleFile = (file) => {
+                if (file && file.type.startsWith('image/')) {
+                    originalFileName = file.name.split('.').slice(0, -1).join('.');
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
+                        imagePreview.src = e.target.result;
+                        uploadPlaceholder.style.display = 'none';
+                        imagePreviewContainer.style.display = 'block';
+                        runOCR(file); // Start the OCR process
+                    };
+                    reader.readAsDataURL(file);
+                } else {
+                    alert('Please select a valid image file (PNG, JPG, WEBP).');
+                }
+            };
+
+            // Handle file input via click
+            fileInput.addEventListener('change', (e) => handleFile(e.target.files[0]));
+
+            // Handle file input via Drag & Drop
+            uploadPlaceholder.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadPlaceholder.classList.add('dragover');
+            });
+            uploadPlaceholder.addEventListener('dragleave', () => {
+                uploadPlaceholder.classList.remove('dragover');
+            });
+            uploadPlaceholder.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadPlaceholder.classList.remove('dragover');
+                handleFile(e.dataTransfer.files[0]);
+            });
+            
+            // Handle Copy Button Click
+            copyBtn.addEventListener('click', () => {
+                navigator.clipboard.writeText(outputText.value).then(() => {
+                    const originalText = copyBtn.innerHTML;
+                    copyBtn.innerHTML = '<span>Copied!</span>';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = originalText;
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy text: ', err);
+                });
+            });
+
+            // Handle Download Button Click
+            downloadBtn.addEventListener('click', () => {
+                const textToSave = outputText.value;
+                const blob = new Blob([textToSave], { type: 'text/plain' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `${originalFileName}.txt`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+            });
+        });
+    </script>
+
+</body>
+</html>
