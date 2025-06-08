@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags for Ranking -->
+    <title>Online QR Code Generator and Scanner - Free & Fast</title>
+    <meta name="description" content="A free and easy-to-use online tool to both generate and scan QR codes. Create QR codes for URLs, text, and more. Scan codes using your camera or by uploading an image.">
+    <meta name="keywords" content="qr code generator, qr code scanner, create qr code, scan qr code, qr reader, qr code creator, online qr tool, decode qr, qr code camera">
+    
+    <!-- Libraries from CDN -->
+    <!-- For QR Code Generation -->
+    <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
+    <!-- For QR Code Scanning -->
+    <script src="https://cdn.jsdelivr.net/npm/jsqr@1.4.0/dist/jsQR.min.js"></script>
+
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+        }
+
+        header { margin-bottom: 20px; }
+        header h1 { color: var(--primary-color); font-size: 2.5rem; margin-bottom: 10px; }
+        header p { font-size: 1.1rem; color: var(--secondary-color); }
+
+        .tool-wrapper {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+        }
+
+        /* --- Tabs --- */
+        .tabs {
+            display: flex;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        .tab-button {
+            flex: 1;
+            padding: 15px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: var(--secondary-color);
+            position: relative;
+            transition: color 0.3s;
+        }
+        .tab-button.active {
+            color: var(--primary-color);
+        }
+        .tab-button.active::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background-color: var(--primary-color);
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* --- Common Styles for Panels --- */
+        .panel { display: flex; flex-direction: column; gap: 20px; }
+        input[type="text"], input[type="file"], .btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            border-radius: 8px;
+        }
+        input[type="text"] {
+            border: 2px solid var(--border-color);
+            transition: border-color 0.3s;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        .btn {
+            font-weight: 600;
+            color: var(--white);
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .btn:hover { transform: translateY(-2px); }
+        .btn-primary { background-color: var(--primary-color); }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+        .btn-secondary { background-color: var(--secondary-color); }
+        .btn-secondary:hover { background-color: #5a6268; }
+
+        /* --- Generator Panel --- */
+        #qrcode-container {
+            width: 256px;
+            height: 256px;
+            margin: 0 auto;
+            border: 5px solid var(--light-bg);
+            border-radius: 8px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: var(--secondary-color);
+        }
+        #qrcode-container img { border-radius: 4px; }
+        #download-btn { display: none; } /* Hidden by default */
+
+        /* --- Scanner Panel --- */
+        #scanner-container {
+            position: relative;
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #000;
+        }
+        #camera-feed {
+            width: 100%;
+            display: none;
+        }
+        #scanner-container .scan-line {
+            display: none;
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--danger-color), transparent);
+            animation: scan 2s infinite linear;
+        }
+        @keyframes scan {
+            0% { top: 0; }
+            50% { top: 99%; }
+            100% { top: 0; }
+        }
+        #scanner-result {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: var(--light-bg);
+            border-radius: 8px;
+            word-wrap: break-word;
+            min-height: 50px;
+        }
+        #scanner-result a { color: var(--primary-color); font-weight: 600; }
+        .scanner-actions { display: flex; gap: 10px; }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 480px) {
+            body { padding: 10px; }
+            header h1 { font-size: 2rem; }
+            .tool-wrapper { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>QR Code Suite</h1>
+            <p>Generate new QR codes or scan existing ones with your camera.</p>
+        </header>
+
+        <div class="tool-wrapper">
+            <div class="tabs">
+                <button class="tab-button active" data-tab="generator">Generator</button>
+                <button class="tab-button" data-tab="scanner">Scanner</button>
+            </div>
+
+            <!-- Generator Panel -->
+            <div id="generator" class="tab-content active">
+                <div class="panel">
+                    <input type="text" id="qr-text" placeholder="Enter text or URL to encode">
+                    <button id="generate-btn" class="btn btn-primary">Generate QR Code</button>
+                    <div id="qrcode-container">Your QR Code will appear here</div>
+                    <a href="#" id="download-btn" class="btn btn-secondary" download="qrcode.png">Download QR Code</a>
+                </div>
+            </div>
+
+            <!-- Scanner Panel -->
+            <div id="scanner" class="tab-content">
+                <div class="panel">
+                    <div class="scanner-actions">
+                        <button id="start-camera-btn" class="btn btn-primary">Use Camera</button>
+                        <label for="upload-qr-btn" class="btn btn-secondary">Upload Image</label>
+                        <input type="file" id="upload-qr-btn" accept="image/*" hidden>
+                    </div>
+                    <div id="scanner-container">
+                        <video id="camera-feed" playsinline></video>
+                        <div class="scan-line"></div>
+                    </div>
+                    <canvas id="canvas" hidden></canvas>
+                    <div id="scanner-result">Decoded result will appear here.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- Common Elements ---
+            const tabs = document.querySelectorAll('.tab-button');
+            const tabContents = document.querySelectorAll('.tab-content');
+
+            // --- Generator Elements ---
+            const qrTextInput = document.getElementById('qr-text');
+            const generateBtn = document.getElementById('generate-btn');
+            const qrCodeContainer = document.getElementById('qrcode-container');
+            const downloadBtn = document.getElementById('download-btn');
+            let qrCode = null;
+
+            // --- Scanner Elements ---
+            const startCameraBtn = document.getElementById('start-camera-btn');
+            const uploadQRInput = document.getElementById('upload-qr-btn');
+            const scannerContainer = document.getElementById('scanner-container');
+            const cameraFeed = document.getElementById('camera-feed');
+            const scanLine = scannerContainer.querySelector('.scan-line');
+            const scannerResult = document.getElementById('scanner-result');
+            const canvas = document.getElementById('canvas');
+            const ctx = canvas.getContext('2d');
+            let stream = null;
+            let animationFrameId = null;
+
+            // --- Tab Switching Logic ---
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    stopCamera();
+                    tabs.forEach(item => item.classList.remove('active'));
+                    tab.classList.add('active');
+                    
+                    const target = document.getElementById(tab.dataset.tab);
+                    tabContents.forEach(content => content.classList.remove('active'));
+                    target.classList.add('active');
+                });
+            });
+
+            // --- GENERATOR LOGIC ---
+            generateBtn.addEventListener('click', () => {
+                const text = qrTextInput.value.trim();
+                if (!text) {
+                    alert('Please enter text or a URL.');
+                    return;
+                }
+                
+                qrCodeContainer.innerHTML = ''; // Clear previous QR code
+                qrCode = new QRCode(qrCodeContainer, {
+                    text: text,
+                    width: 256,
+                    height: 256,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+                
+                // Allow downloading after a short delay for the image to render
+                setTimeout(() => {
+                    const dataUrl = qrCodeContainer.querySelector('img').src;
+                    downloadBtn.href = dataUrl;
+                    downloadBtn.style.display = 'block';
+                }, 500);
+            });
+
+            // --- SCANNER LOGIC ---
+            function handleDecodedResult(data) {
+                // Check if the result is a URL and make it clickable
+                try {
+                    new URL(data);
+                    scannerResult.innerHTML = `Result: <a href="${data}" target="_blank">${data}</a>`;
+                } catch (_) {
+                    scannerResult.textContent = `Result: ${data}`;
+                }
+            }
+
+            // Scan from Uploaded Image
+            uploadQRInput.addEventListener('change', e => {
+                const file = e.target.files[0];
+                if (!file) return;
+
+                stopCamera();
+                const reader = new FileReader();
+                reader.onload = e => {
+                    const img = new Image();
+                    img.onload = () => {
+                        canvas.width = img.width;
+                        canvas.height = img.height;
+                        ctx.drawImage(img, 0, 0, img.width, img.height);
+                        const imageData = ctx.getImageData(0, 0, img.width, img.height);
+                        const code = jsQR(imageData.data, imageData.width, imageData.height);
+
+                        if (code) {
+                            handleDecodedResult(code.data);
+                        } else {
+                            scannerResult.textContent = 'No QR code found in the image.';
+                        }
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
+            });
+
+            // Scan from Camera
+            startCameraBtn.addEventListener('click', () => {
+                if (stream) {
+                    stopCamera();
+                    return;
+                }
+                
+                navigator.mediaDevices.getUserMedia({ video: { facingMode: "environment" } })
+                    .then(s => {
+                        stream = s;
+                        cameraFeed.srcObject = stream;
+                        cameraFeed.style.display = 'block';
+                        cameraFeed.play();
+                        scanLine.style.display = 'block';
+                        startCameraBtn.textContent = 'Stop Camera';
+                        startCameraBtn.classList.remove('btn-primary');
+                        startCameraBtn.classList.add('btn-secondary');
+                        requestAnimationFrame(tick);
+                    })
+                    .catch(err => {
+                        console.error("Camera access error:", err);
+                        alert("Could not access the camera. Please ensure you have given permission.");
+                    });
+            });
+            
+            function stopCamera() {
+                if (stream) {
+                    stream.getTracks().forEach(track => track.stop());
+                }
+                stream = null;
+                cameraFeed.style.display = 'none';
+                scanLine.style.display = 'none';
+                startCameraBtn.textContent = 'Use Camera';
+                startCameraBtn.classList.remove('btn-secondary');
+                startCameraBtn.classList.add('btn-primary');
+                cancelAnimationFrame(animationFrameId);
+            }
+
+            function tick() {
+                if (cameraFeed.readyState === cameraFeed.HAVE_ENOUGH_DATA) {
+                    canvas.height = cameraFeed.videoHeight;
+                    canvas.width = cameraFeed.videoWidth;
+                    ctx.drawImage(cameraFeed, 0, 0, canvas.width, canvas.height);
+                    const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+                    const code = jsQR(imageData.data, imageData.width, imageData.height, {
+                        inversionAttempts: "dontInvert",
+                    });
+
+                    if (code) {
+                        handleDecodedResult(code.data);
+                        stopCamera();
+                        return; // Stop the loop
+                    }
+                }
+                animationFrameId = requestAnimationFrame(tick);
+            }
+        });
+    </script>
+
+</body>
+</html>
