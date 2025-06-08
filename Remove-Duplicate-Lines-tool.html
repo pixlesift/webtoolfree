@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags for Ranking -->
+    <title>Remove Duplicate Lines Online Tool - Free & Fast</title>
+    <meta name="description" content="A free online tool to remove duplicate lines from any text or list. Keep only the unique lines. Options for case-sensitive filtering and ignoring empty lines.">
+    <meta name="keywords" content="remove duplicate lines, unique lines, deduplicate text, text cleaner, list cleaner, remove duplicates, online tool, text utility, unique filter">
+    
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --danger-color: #dc3545;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 900px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        /* --- Remover Wrapper --- */
+        .remover-wrapper {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: left;
+            display: grid;
+            gap: 20px;
+        }
+
+        .input-area, .output-area {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h3 {
+            margin-bottom: 10px;
+            color: var(--text-color);
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 220px;
+            padding: 15px;
+            font-size: 1rem;
+            font-family: 'Menlo', 'Consolas', monospace;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            resize: vertical;
+            line-height: 1.6;
+            transition: border-color 0.3s;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+        
+        #text-output {
+            background-color: var(--light-bg);
+        }
+
+        /* --- Controls & Stats --- */
+        .controls {
+            background-color: var(--light-bg);
+            padding: 20px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+
+        .action-button {
+            width: 100%;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+        .action-button:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+
+        .options {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .option-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+        }
+        
+        .option-item input[type="checkbox"] {
+            width: 1.2em;
+            height: 1.2em;
+            accent-color: var(--primary-color);
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+            border-top: 1px solid var(--border-color);
+            padding-top: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .stat-item {
+            font-size: 1rem;
+            color: var(--secondary-color);
+            text-align: center;
+        }
+
+        .stat-item span {
+            display: block;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+        
+        .stat-item.removed span {
+            color: var(--danger-color);
+        }
+
+        .output-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--secondary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .btn:hover {
+            background-color: #5a6268;
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body { padding: 10px; }
+            header h1 { font-size: 2rem; }
+            .remover-wrapper { padding: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Remove Duplicate Lines</h1>
+            <p>Paste your text below to instantly remove duplicate lines, leaving only unique ones.</p>
+        </header>
+
+        <main class="remover-wrapper">
+            <div class="input-area">
+                <h3>Input Text</h3>
+                <textarea id="text-input" placeholder="Paste your list or text here..."></textarea>
+            </div>
+
+            <div class="controls">
+                <button id="btn-remove-duplicates" class="action-button">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M11.534 7.034a.5.5 0 0 0-.448.874c1.437.443 2.56 1.67 2.665 3.145a.5.5 0 0 0 .962-.28c-.13-1.846-1.534-3.44-3.179-3.739a.5.5 0 0 0-.004-.001Z"/>
+                        <path d="m5.273 2.25 2.717 2.717 2.717-2.717a2.5 2.5 0 1 1 3.536 3.535L8 11.586 1.464 5.05A2.5 2.5 0 1 1 5.273 2.25zm.056 4.327L8 9.293l2.67-2.67a.5.5 0 0 0-.708-.707L8 7.879l-2.015-2.015a.5.5 0 0 0-.707.707Z"/>
+                    </svg>
+                    Remove Duplicates
+                </button>
+                <div class="options">
+                    <label class="option-item">
+                        <input type="checkbox" id="case-sensitive" checked>
+                        <span>Case Sensitive</span>
+                    </label>
+                    <label class="option-item">
+                        <input type="checkbox" id="ignore-empty">
+                        <span>Ignore Empty Lines</span>
+                    </label>
+                </div>
+                <div class="stats">
+                    <div class="stat-item">
+                        <span id="lines-before">0</span>Lines Before
+                    </div>
+                    <div class="stat-item removed">
+                        <span id="lines-removed">0</span>Lines Removed
+                    </div>
+                    <div class="stat-item">
+                        <span id="lines-after">0</span>Lines After
+                    </div>
+                </div>
+            </div>
+
+            <div class="output-area">
+                <h3>Output (Unique Lines)</h3>
+                <textarea id="text-output" readonly placeholder="Unique lines will appear here..."></textarea>
+                <div class="output-controls" style="margin-top: 10px;">
+                    <button id="btn-copy" class="btn">Copy Results</button>
+                    <button id="btn-clear" class="btn">Clear All</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get DOM Elements
+            const textInput = document.getElementById('text-input');
+            const textOutput = document.getElementById('text-output');
+            
+            const btnRemove = document.getElementById('btn-remove-duplicates');
+            const btnCopy = document.getElementById('btn-copy');
+            const btnClear = document.getElementById('btn-clear');
+            
+            const caseSensitiveCheckbox = document.getElementById('case-sensitive');
+            const ignoreEmptyCheckbox = document.getElementById('ignore-empty');
+            
+            const linesBeforeStat = document.getElementById('lines-before');
+            const linesRemovedStat = document.getElementById('lines-removed');
+            const linesAfterStat = document.getElementById('lines-after');
+
+            // --- MAIN FUNCTION ---
+            const processLines = () => {
+                let lines = textInput.value.split('\n');
+                const originalLineCount = lines.length;
+                
+                // Option: Ignore empty lines
+                if (ignoreEmptyCheckbox.checked) {
+                    lines = lines.filter(line => line.trim() !== '');
+                }
+                const nonEmptyLineCount = lines.length;
+
+                const isCaseSensitive = caseSensitiveCheckbox.checked;
+                const seen = new Set();
+                const uniqueLines = [];
+
+                for (const line of lines) {
+                    // Use a key for comparison, which is either the line itself or its lowercase version
+                    const key = isCaseSensitive ? line : line.toLowerCase();
+                    if (!seen.has(key)) {
+                        seen.add(key);
+                        uniqueLines.push(line);
+                    }
+                }
+                
+                const finalLineCount = uniqueLines.length;
+                const removedCount = nonEmptyLineCount - finalLineCount;
+
+                // Update UI
+                textOutput.value = uniqueLines.join('\n');
+                linesBeforeStat.textContent = ignoreEmptyCheckbox.checked ? nonEmptyLineCount : originalLineCount;
+                linesRemovedStat.textContent = removedCount;
+                linesAfterStat.textContent = finalLineCount;
+            };
+
+            // --- EVENT LISTENERS ---
+            btnRemove.addEventListener('click', processLines);
+
+            btnClear.addEventListener('click', () => {
+                textInput.value = '';
+                textOutput.value = '';
+                linesBeforeStat.textContent = '0';
+                linesRemovedStat.textContent = '0';
+                linesAfterStat.textContent = '0';
+            });
+
+            btnCopy.addEventListener('click', () => {
+                if (navigator.clipboard && textOutput.value) {
+                    navigator.clipboard.writeText(textOutput.value).then(() => {
+                        const originalText = btnCopy.textContent;
+                        btnCopy.textContent = 'Copied!';
+                        btnCopy.style.backgroundColor = 'var(--success-color)';
+                        setTimeout(() => {
+                            btnCopy.textContent = originalText;
+                            btnCopy.style.backgroundColor = 'var(--secondary-color)';
+                        }, 2000);
+                    });
+                }
+            });
+
+            // Optional: Live update as user types (can be intensive for large texts)
+            // textInput.addEventListener('input', processLines);
+        });
+    </script>
+
+</body>
+</html>
