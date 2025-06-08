@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>Text Case Converter | UPPERCASE, lowercase, Title Case & More</title>
+    <meta name="description" content="A free online tool to convert text into different cases like uppercase, lowercase, sentence case, title case, and more. Easily copy your text and see live character and word counts.">
+    <meta name="keywords" content="text case converter, change case, uppercase, lowercase, sentence case, title case, proper case, convert text, online tool, text tool">
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-blue: #007BFF;
+            --light-blue: #EBF5FF;
+            --dark-blue: #0056b3;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --medium-gray: #CED4DA;
+            --dark-gray: #495057;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tool-container {
+            background-color: var(--white);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 800px;
+        }
+
+        h1 { color: var(--primary-blue); margin-top: 0; margin-bottom: 10px; text-align: center; }
+        .subtitle { margin-top: 0; margin-bottom: 25px; color: #6c757d; text-align: center; }
+        
+        /* Text Area */
+        #textInput {
+            width: 100%;
+            height: 200px;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--medium-gray);
+            font-family: 'Poppins', sans-serif;
+            font-size: 1em;
+            resize: vertical;
+            box-sizing: border-box;
+            transition: border-color 0.2s;
+        }
+        #textInput:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
+
+        /* Button Grid */
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .action-btn {
+            padding: 12px;
+            background-color: var(--primary-blue);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 0.95em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .action-btn:hover {
+            background-color: var(--dark-blue);
+            transform: translateY(-2px);
+        }
+        
+        .utility-buttons { display: flex; gap: 10px; margin-top: 10px; }
+        .utility-btn {
+            flex-grow: 1; padding: 10px; background-color: var(--light-blue);
+            color: var(--primary-blue); border: 1px solid var(--light-blue);
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+        }
+        .utility-btn:hover { border-color: var(--primary-blue); }
+        .utility-btn svg { width: 16px; height: 16px; }
+
+        /* Stats Area */
+        .stats-area {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 25px;
+            padding: 15px;
+            background: var(--light-gray);
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-item .value {
+            font-size: 1.5em;
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+        .stat-item .label {
+            font-size: 0.9em;
+            color: var(--dark-gray);
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 600px) {
+            .tool-container { padding: 20px; }
+            h1 { font-size: 1.8em; }
+            .button-grid { grid-template-columns: 1fr 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- HTML STRUCTURE --- -->
+    <div class="tool-container">
+        <h1>Text Case Converter</h1>
+        <p class="subtitle">Instantly convert text case, count words and characters.</p>
+
+        <textarea id="textInput" placeholder="Type or paste your text here..."></textarea>
+
+        <div class="button-grid" id="caseButtons">
+            <button class="action-btn" data-case="upper">UPPER CASE</button>
+            <button class="action-btn" data-case="lower">lower case</button>
+            <button class="action-btn" data-case="sentence">Sentence case</button>
+            <button class="action-btn" data-case="title">Title Case</button>
+            <button class="action-btn" data-case="alternate">aLtErNaTiNg cAsE</button>
+            <button class="action-btn" data-case="inverse">iNVERSE cASE</button>
+        </div>
+
+        <div class="utility-buttons">
+            <button class="action-btn utility-btn" id="copyBtn">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                Copy Text
+            </button>
+            <button class="action-btn utility-btn" id="clearBtn">
+                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                Clear Text
+            </button>
+        </div>
+
+        <div class="stats-area">
+            <div class="stat-item">
+                <div class="value" id="charCount">0</div>
+                <div class="label">Characters</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="wordCount">0</div>
+                <div class="label">Words</div>
+            </div>
+            <div class="stat-item">
+                <div class="value" id="lineCount">0</div>
+                <div class="label">Lines</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const textInput = document.getElementById('textInput');
+            const caseButtonsContainer = document.getElementById('caseButtons');
+            const copyBtn = document.getElementById('copyBtn');
+            const clearBtn = document.getElementById('clearBtn');
+            const charCount = document.getElementById('charCount');
+            const wordCount = document.getElementById('wordCount');
+            const lineCount = document.getElementById('lineCount');
+
+            // --- Event Listeners ---
+            textInput.addEventListener('input', updateStats);
+            
+            // Event delegation for case buttons
+            caseButtonsContainer.addEventListener('click', (event) => {
+                if (event.target.tagName === 'BUTTON') {
+                    convertCase(event.target.dataset.case);
+                }
+            });
+
+            copyBtn.addEventListener('click', copyText);
+            clearBtn.addEventListener('click', clearText);
+
+            // --- Core Functions ---
+            function convertCase(caseType) {
+                const currentText = textInput.value;
+                let newText = '';
+
+                switch (caseType) {
+                    case 'upper':
+                        newText = currentText.toUpperCase();
+                        break;
+                    case 'lower':
+                        newText = currentText.toLowerCase();
+                        break;
+                    case 'sentence':
+                        newText = currentText.toLowerCase().replace(/(^\s*\w|[\.\!\?]\s*\w)/g, c => c.toUpperCase());
+                        break;
+                    case 'title':
+                        newText = currentText.toLowerCase().replace(/\b\w/g, c => c.toUpperCase());
+                        break;
+                    case 'alternate':
+                        newText = currentText.split('').map((char, index) => 
+                            index % 2 === 0 ? char.toLowerCase() : char.toUpperCase()
+                        ).join('');
+                        break;
+                    case 'inverse':
+                        newText = currentText.split('').map(char => 
+                            char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
+                        ).join('');
+                        break;
+                }
+                textInput.value = newText;
+                updateStats();
+            }
+
+            function copyText() {
+                if (textInput.value) {
+                    navigator.clipboard.writeText(textInput.value)
+                        .then(() => {
+                            copyBtn.innerHTML = 'Copied!';
+                            setTimeout(() => {
+                                copyBtn.innerHTML = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> Copy Text';
+                            }, 1500);
+                        })
+                        .catch(err => console.error('Failed to copy text: ', err));
+                }
+            }
+
+            function clearText() {
+                textInput.value = '';
+                updateStats();
+            }
+            
+            function updateStats() {
+                const text = textInput.value;
+                
+                // Character count
+                charCount.textContent = text.length;
+                
+                // Word count
+                const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+                wordCount.textContent = words.length;
+                
+                // Line count
+                const lines = text.split('\n').filter(line => line.trim() !== '');
+                lineCount.textContent = text ? text.split('\n').length : 0;
+            }
+
+            // --- Initializer ---
+            updateStats();
+        });
+    </script>
+</body>
+</html>
