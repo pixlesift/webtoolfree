@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- SEO Meta Tags -->
+    <title>GST Calculator | Calculate Goods & Services Tax Online</title>
+    <meta name="description" content="Easily calculate the GST amount and final price. Our free online GST calculator lets you add or remove GST from any amount with various tax slabs (5%, 12%, 18%, 28%).">
+    <meta name="keywords" content="GST calculator, calculate GST, GST amount, goods and services tax, online GST tool, GST inclusive, GST exclusive, add GST, remove GST">
+    
+    <!-- Google Fonts for a modern look -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- CSS STYLES --- */
+        :root {
+            --primary-blue: #007BFF;
+            --light-blue: #EBF5FF;
+            --dark-blue: #0056b3;
+            --white: #FFFFFF;
+            --light-gray: #F8F9FA;
+            --medium-gray: #CED4DA;
+            --dark-gray: #495057;
+            --danger-red: #dc3545;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--light-gray);
+            color: var(--dark-gray);
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .tool-container {
+            background-color: var(--white);
+            padding: 30px 40px;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 { color: var(--primary-blue); margin-top: 0; margin-bottom: 10px; text-align: center; }
+        .subtitle { margin-top: 0; margin-bottom: 30px; color: #6c757d; text-align: center; }
+        
+        /* Calculation Type Switcher Tabs */
+        .tabs {
+            display: flex; background-color: var(--light-gray);
+            border-radius: 8px; padding: 5px; margin-bottom: 25px;
+        }
+        .tab-btn {
+            flex: 1; padding: 10px 15px; border: none; background-color: transparent;
+            color: var(--dark-gray); font-size: 1em; font-weight: 500;
+            font-family: 'Poppins', sans-serif; cursor: pointer; border-radius: 6px;
+            transition: all 0.3s ease;
+        }
+        .tab-btn.active {
+            background-color: var(--primary-blue); color: var(--white);
+            box-shadow: 0 2px 10px rgba(0, 123, 255, 0.2);
+        }
+
+        /* Input Fields */
+        .input-section { display: flex; flex-direction: column; gap: 20px; }
+        .input-group label { font-weight: 500; display: block; margin-bottom: 8px; }
+        .input-group input {
+            width: 100%; padding: 12px; border: 1px solid var(--medium-gray);
+            border-radius: 8px; font-size: 1em; box-sizing: border-box;
+        }
+        
+        .action-btn {
+            width: 100%; padding: 15px; margin-top: 25px; background-color: var(--primary-blue);
+            color: var(--white); font-size: 1.1em; font-weight: 500; border-radius: 8px;
+            border: none; cursor: pointer; transition: all 0.3s ease;
+        }
+        .action-btn:hover { background-color: var(--dark-blue); box-shadow: 0 5px 15px rgba(0, 123, 255, 0.3); }
+
+        #error-message { color: var(--danger-red); text-align: center; height: 20px; font-size: 0.9em; font-weight: 500; margin-top: 10px;}
+        
+        /* Result Area */
+        .result-area { display: none; margin-top: 30px; padding: 20px; background: var(--light-blue); border-radius: 8px; }
+        .result-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid var(--medium-gray);
+        }
+        .result-row:last-child { border-bottom: none; }
+        .result-row .label { font-weight: 500; }
+        .result-row .value { font-weight: 600; font-size: 1.1em; }
+        #resultFinalRow .label { font-weight: 700; color: var(--primary-blue); }
+        #resultFinalRow .value { font-size: 1.5em; font-weight: 700; color: var(--primary-blue); }
+
+        /* Mobile Responsiveness */
+        @media (max-width: 540px) {
+            .tool-container { padding: 20px; }
+            h1 { font-size: 1.8em; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- --- HTML STRUCTURE --- -->
+    <div class="tool-container">
+        <h1>GST Calculator</h1>
+        <p class="subtitle">Calculate tax by adding or removing GST from a price.</p>
+
+        <div class="tabs">
+            <button class="tab-btn active" data-action="add">Add GST</button>
+            <button class="tab-btn" data-action="remove">Remove GST</button>
+        </div>
+
+        <div class="input-section">
+            <div class="input-group">
+                <label id="amountLabel">Initial Amount (Excluding GST)</label>
+                <input type="number" id="initialAmount" placeholder="e.g., 1000">
+            </div>
+            <div class="input-group">
+                <label for="gstRate">GST Rate (%)</label>
+                <input type="number" id="gstRate" placeholder="e.g., 18">
+            </div>
+        </div>
+
+        <div id="error-message"></div>
+        <button id="calculateBtn" class="action-btn">Calculate</button>
+
+        <div class="result-area" id="resultArea">
+            <div class="result-row">
+                <span class="label" id="resultInitialLabel">Initial Amount</span>
+                <span class="value" id="resultInitial"></span>
+            </div>
+            <div class="result-row">
+                <span class="label">GST Amount</span>
+                <span class="value" id="resultGst"></span>
+            </div>
+            <div class="result-row" id="resultFinalRow">
+                <span class="label" id="resultFinalLabel">Final Amount</span>
+                <span class="value" id="resultFinal"></span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* --- JAVASCRIPT LOGIC --- */
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- DOM Elements ---
+            const tabs = document.querySelectorAll('.tab-btn');
+            const amountLabel = document.getElementById('amountLabel');
+            const initialAmountInput = document.getElementById('initialAmount');
+            const gstRateInput = document.getElementById('gstRate');
+            const calculateBtn = document.getElementById('calculateBtn');
+            const errorMessage = document.getElementById('error-message');
+            
+            const resultArea = document.getElementById('resultArea');
+            const resultInitialLabel = document.getElementById('resultInitialLabel');
+            const resultInitial = document.getElementById('resultInitial');
+            const resultGst = document.getElementById('resultGst');
+            const resultFinalLabel = document.getElementById('resultFinalLabel');
+            const resultFinal = document.getElementById('resultFinal');
+            
+            let currentAction = 'add'; // 'add' or 'remove'
+
+            // --- Event Listeners ---
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    currentAction = tab.dataset.action;
+                    updateUIForAction();
+                });
+            });
+
+            calculateBtn.addEventListener('click', calculateGst);
+
+            // --- UI Update Function ---
+            function updateUIForAction() {
+                // Update tab appearance
+                tabs.forEach(t => t.classList.remove('active'));
+                document.querySelector(`.tab-btn[data-action="${currentAction}"]`).classList.add('active');
+
+                // Update input label
+                if (currentAction === 'add') {
+                    amountLabel.textContent = 'Initial Amount (Excluding GST)';
+                } else {
+                    amountLabel.textContent = 'Total Amount (Including GST)';
+                }
+
+                // Reset state
+                resultArea.style.display = 'none';
+                errorMessage.textContent = '';
+                initialAmountInput.value = '';
+                gstRateInput.value = '';
+            }
+
+            // --- Main Calculation Function ---
+            function calculateGst() {
+                const initialAmount = parseFloat(initialAmountInput.value);
+                const gstRate = parseFloat(gstRateInput.value);
+
+                // --- Validation ---
+                if (isNaN(initialAmount) || isNaN(gstRate) || initialAmount <= 0 || gstRate <= 0) {
+                    errorMessage.textContent = 'Please enter valid, positive numbers for both fields.';
+                    resultArea.style.display = 'none';
+                    return;
+                }
+                errorMessage.textContent = ''; // Clear any previous errors
+
+                let netAmount, gstAmount, finalAmount;
+                const rate = gstRate / 100;
+
+                if (currentAction === 'add') {
+                    netAmount = initialAmount;
+                    gstAmount = netAmount * rate;
+                    finalAmount = netAmount + gstAmount;
+                    
+                    resultInitialLabel.textContent = 'Initial Amount';
+                    resultFinalLabel.textContent = 'Final Amount (Inc. GST)';
+
+                } else { // Remove GST
+                    finalAmount = initialAmount;
+                    netAmount = finalAmount / (1 + rate);
+                    gstAmount = finalAmount - netAmount;
+                    
+                    resultInitialLabel.textContent = 'Net Amount (Exc. GST)';
+                    resultFinalLabel.textContent = 'Gross Amount';
+                }
+
+                displayResults(netAmount, gstAmount, finalAmount);
+            }
+
+            function displayResults(net, gst, final) {
+                const currencyFormat = (num) => num.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                
+                resultInitial.textContent = `₹ ${currencyFormat(net)}`;
+                resultGst.textContent = `₹ ${currencyFormat(gst)}`;
+                resultFinal.textContent = `₹ ${currencyFormat(final)}`;
+
+                resultArea.style.display = 'block';
+            }
+            
+            // Initial call to set up the UI correctly
+            updateUIForAction();
+        });
+    </script>
+</body>
+</html>
