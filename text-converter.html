@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags for Ranking -->
+    <title>Online Text Case Converter Tool - Change Case Instantly</title>
+    <meta name="description" content="A free and powerful online text case converter. Easily change text to Sentence case, lower case, UPPER CASE, Capitalized Case, and more. Includes real-time word and character counters.">
+    <meta name="keywords" content="text case converter, case converter, change case, sentence case, lowercase, uppercase, capitalized case, title case, alternating case, online tool, text tool, word counter, character counter">
+    
+    <style>
+        /* --- Global Styles & Theme --- */
+        :root {
+            --primary-color: #007bff;
+            --primary-hover: #0056b3;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+            --white: #ffffff;
+            --text-color: #333;
+            --border-color: #dee2e6;
+            --success-color: #28a745;
+            --shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--light-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            text-align: center;
+        }
+
+        header {
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: var(--primary-color);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+        }
+
+        /* --- Converter Wrapper --- */
+        .converter-wrapper {
+            background: var(--white);
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: var(--shadow);
+            text-align: left;
+        }
+
+        /* --- Text Area --- */
+        #text-input {
+            width: 100%;
+            min-height: 200px;
+            padding: 15px;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 2px solid var(--border-color);
+            resize: vertical;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            transition: border-color 0.3s;
+        }
+
+        #text-input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        /* --- Button Groups --- */
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .btn {
+            flex-grow: 1;
+            padding: 12px 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--white);
+            background-color: var(--primary-color);
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .btn:hover {
+            background-color: var(--primary-hover);
+            transform: translateY(-2px);
+        }
+        
+        .btn-utility {
+            background-color: var(--secondary-color);
+        }
+        .btn-utility:hover {
+            background-color: #5a6268;
+        }
+
+        /* --- Statistics Bar --- */
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            background-color: var(--light-bg);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .stat-item {
+            font-size: 1rem;
+            color: var(--secondary-color);
+        }
+
+        .stat-item span {
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        /* --- Mobile Responsiveness --- */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+
+            header h1 {
+                font-size: 2rem;
+            }
+
+            .converter-wrapper {
+                padding: 20px;
+            }
+
+            .stats {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <header>
+            <h1>Text Case Converter</h1>
+            <p>Convert your text to any case, count words, and more. Simple, fast, and free.</p>
+        </header>
+
+        <main class="converter-wrapper">
+            <textarea id="text-input" placeholder="Type or paste your text here..."></textarea>
+
+            <div class="stats">
+                <div class="stat-item">Characters: <span id="char-count">0</span></div>
+                <div class="stat-item">Words: <span id="word-count">0</span></div>
+                <div class="stat-item">Lines: <span id="line-count">0</span></div>
+            </div>
+
+            <div class="button-group">
+                <button id="btn-sentence" class="btn">Sentence case</button>
+                <button id="btn-lower" class="btn">lower case</button>
+                <button id="btn-upper" class="btn">UPPER CASE</button>
+                <button id="btn-capitalized" class="btn">Capitalized Case</button>
+                <button id="btn-alternating" class="btn">aLtErNaTiNg cAsE</button>
+                <button id="btn-inverse" class="btn">iNVERSE cASE</button>
+            </div>
+
+            <div class="button-group">
+                <button id="btn-copy" class="btn btn-utility">Copy to Clipboard</button>
+                <button id="btn-clear" class="btn btn-utility">Clear Text</button>
+            </div>
+        </main>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Get DOM Elements
+            const textInput = document.getElementById('text-input');
+            const charCount = document.getElementById('char-count');
+            const wordCount = document.getElementById('word-count');
+            const lineCount = document.getElementById('line-count');
+            
+            // Conversion Buttons
+            const btnSentence = document.getElementById('btn-sentence');
+            const btnLower = document.getElementById('btn-lower');
+            const btnUpper = document.getElementById('btn-upper');
+            const btnCapitalized = document.getElementById('btn-capitalized');
+            const btnAlternating = document.getElementById('btn-alternating');
+            const btnInverse = document.getElementById('btn-inverse');
+
+            // Utility Buttons
+            const btnCopy = document.getElementById('btn-copy');
+            const btnClear = document.getElementById('btn-clear');
+
+            // --- UPDATE STATS FUNCTION ---
+            const updateStats = () => {
+                const text = textInput.value;
+
+                // Character count
+                charCount.textContent = text.length;
+
+                // Word count
+                const words = text.trim().split(/\s+/).filter(word => word.length > 0);
+                wordCount.textContent = words.length;
+
+                // Line count
+                const lines = text.split('\n').filter(line => line.length > 0);
+                lineCount.textContent = text.length === 0 ? 0 : text.split('\n').length;
+            };
+
+            // Trigger stat update on any input
+            textInput.addEventListener('input', updateStats);
+            
+            // --- CONVERSION LOGIC ---
+            const applyConversion = (conversionFn) => {
+                const currentText = textInput.value;
+                textInput.value = conversionFn(currentText);
+                updateStats(); // Update stats after conversion
+            };
+
+            // Sentence case
+            btnSentence.addEventListener('click', () => {
+                applyConversion(text => {
+                    return text.toLowerCase().replace(/(^\s*\w|[.!?]\s*\w)/g, c => c.toUpperCase());
+                });
+            });
+
+            // Lower case
+            btnLower.addEventListener('click', () => {
+                applyConversion(text => text.toLowerCase());
+            });
+
+            // UPPER CASE
+            btnUpper.addEventListener('click', () => {
+                applyConversion(text => text.toUpperCase());
+            });
+
+            // Capitalized Case (Title Case)
+            btnCapitalized.addEventListener('click', () => {
+                applyConversion(text => text.toLowerCase().replace(/\b\w/g, char => char.toUpperCase()));
+            });
+
+            // aLtErNaTiNg cAsE
+            btnAlternating.addEventListener('click', () => {
+                applyConversion(text => {
+                    return text.split('').map((char, i) => 
+                        i % 2 === 0 ? char.toLowerCase() : char.toUpperCase()
+                    ).join('');
+                });
+            });
+            
+            // iNVERSE cASE
+            btnInverse.addEventListener('click', () => {
+                applyConversion(text => {
+                    return text.split('').map(char =>
+                        char === char.toUpperCase() ? char.toLowerCase() : char.toUpperCase()
+                    ).join('');
+                });
+            });
+
+
+            // --- UTILITY LOGIC ---
+            // Clear Text
+            btnClear.addEventListener('click', () => {
+                textInput.value = '';
+                updateStats();
+            });
+
+            // Copy to Clipboard
+            btnCopy.addEventListener('click', () => {
+                if (navigator.clipboard && textInput.value) {
+                    navigator.clipboard.writeText(textInput.value).then(() => {
+                        const originalText = btnCopy.textContent;
+                        btnCopy.textContent = 'Copied!';
+                        btnCopy.style.backgroundColor = 'var(--success-color)';
+                        setTimeout(() => {
+                            btnCopy.textContent = originalText;
+                            btnCopy.style.backgroundColor = 'var(--secondary-color)';
+                        }, 2000);
+                    });
+                }
+            });
+            
+            // Initial stat calculation on load
+            updateStats();
+        });
+    </script>
+
+</body>
+</html>
