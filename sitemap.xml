@@ -1,161 +1,102 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<urlset
-
-      <url>
-  <loc>https://pixlesift.github.io/webtoolfree/</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>1.00</priority>
+<?xml version="1.0" encoding="UTF-8"?> 
+<urlset xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"> 
+<url>
+<loc>https://pixlesift.github.io/webtoolfree/</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/image-converter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/image-converter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/image-compressor.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/image-compressor.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/image-resizer.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/image-resizer.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/image-cropper.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/image-cropper.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Image-to-Text.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Image-to-Text.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/PDF-to-Word-%20Word-%20to-%20PDF.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/PDF-to-Word- Word- to- PDF.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/PDF-Compressor.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/PDF-Compressor.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/PDF-Merger-&amp;-Splitter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/PDF-Merger-&amp;-Splitter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Document-Converter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Document-Converter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/pdf-security.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/pdf-security.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/eSign-PDF.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/eSign-PDF.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Age-Calculator.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/ Scientific-Calculator.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/BMI-Calculator.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Age-Calculator.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Loan-EMI-Calculator.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/BMI-Calculator.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/free-GST-Calculator.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Loan-EMI-Calculator.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/free-Currency-Converter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/free-GST-Calculator.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Text-Case-Converter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/free-Currency-Converter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Word-&amp;-Character-Counter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Text-Case-Converter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/Remove-Duplicate-Lines-tool.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Word-&amp;-Character-Counter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/text-sorter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/Remove-Duplicate-Lines-tool.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/text-reverser.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/text-sorter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/text-encryptor.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/text-reverser.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/code-minifier.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/text-encryptor.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/online-QR-code-senerator-scanner.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/code-minifier.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/password-generator.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/online-QR-code-senerator-scanner.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/unit-converter.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/password-generator.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/index.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/unit-converter.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/contact.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/index.html</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/privacy.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/index.html#tools</loc>
 </url>
 <url>
-  <loc>https://pixlesift.github.io/webtoolfree/terms.html</loc>
-  <lastmod>2025-06-08T17:20:03+00:00</lastmod>
-  <priority>0.80</priority>
+<loc>https://pixlesift.github.io/contact.html</loc>
 </url>
-
-
+<url>
+<loc>https://pixlesift.github.io/privacy.html</loc>
+</url>
+<url>
+<loc>https://pixlesift.github.io/terms.html</loc>
+</url>
 </urlset>
